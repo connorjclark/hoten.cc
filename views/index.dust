@@ -1,0 +1,108 @@
+{>"layout" /}
+{<title}Login{/title}
+{<body}
+
+
+<div id="header-container" class="">
+  <div class="wrap container rel-container clear">
+    <header class="logo" role="banner">
+      <h1>Connor Clark - Programmer</h1>
+    </header>
+    <nav id="access" role="navigation" class="">
+      <a id="skip" href="#content" class="assistive-text" title="Skip to content">Skip to content</a>
+      <div id="menu-icon">
+        <div id="menu-plus">
+        </div>
+      </div>
+      <div class="menu-header">
+        <ul id="menu-ish-nav" class="menu">
+          <li class="menu-item"><a href="#about">About</a></li>
+          <li class="menu-item"><a href="#work">Work</a></li>
+          <li class="menu-item"><a href="#contact">Contact</a></li>
+          <li class="menu-item last-item"><a href="http://blog.cjamcl.com">Blog</a></li>
+        </ul>
+      </div>       
+    </nav>
+  </div>
+</div>
+
+<section class="hero">
+
+</section>
+
+<div id="scroll-top-detector">
+
+</div>
+
+<div class="jumbotron">
+  <div class="container text-center">
+    <p>Hello World.</p>
+  </div>
+</div>
+
+<section class="container text-center" id="about">
+  <h2>About</h2>
+  <hr>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+</section>
+
+<section class="container text-center" id="work">
+  <h2>Work</h2>
+  <hr>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+</section>
+
+<section class="container text-center" id="contact">
+  <h2>Contact</h2>
+  <hr>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+  <p>filler</p>
+</section>
+{/body}

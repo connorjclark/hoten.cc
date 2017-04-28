@@ -10,12 +10,12 @@
     </header>
     <nav id="access" role="navigation" class="">
       <a id="skip" href="#content" class="assistive-text" title="Skip to content">Skip to content</a>
-      <div id="menu-icon">
+      <div id="menu-icon" class="mt-2">
         <div id="menu-plus">
         </div>
       </div>
       <div class="menu-header">
-        <ul id="menu-ish-nav" class="menu">
+        <ul id="menu-ish-nav" class="menu d-flex flex-column flex-md-row">
           <li class="menu-item"><a href="#about">About</a></li>
           <li class="menu-item"><a href="#work">Work</a></li>
           <li class="menu-item"><a href="#contact">Contact</a></li>

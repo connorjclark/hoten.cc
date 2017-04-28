@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dustjs-linkedin": "^2.7.5",
     "express": "^4.15.2",
     "klei-dust": "^1.0.0",
     "path": "^0.12.7"

@@ -4,9 +4,9 @@
 
 
 <div id="header-container" class="">
-  <div class="wrap container rel-container clear">
+  <div class="container d-flex justify-content-between align-items-center">
     <header class="logo" role="banner">
-      <h1>Connor Clark - Programmer</h1>
+      <h1>Connor Clark</h1>
     </header>
     <nav id="access" role="navigation" class="">
       <a id="skip" href="#content" class="assistive-text" title="Skip to content">Skip to content</a>
@@ -21,7 +21,7 @@
           <li class="menu-item"><a href="#contact">Contact</a></li>
           <li class="menu-item last-item"><a href="http://blog.cjamcl.com">Blog</a></li>
         </ul>
-      </div>       
+      </div>
     </nav>
   </div>
 </div>
@@ -34,75 +34,79 @@
 
 </div>
 
-<div class="jumbotron">
+<main>
   <div class="container text-center">
-    <p>Hello World.</p>
+    <div class="jumbotron">
+      <p>Hello World.</p>
+    </div>
   </div>
-</div>
 
-<section class="container text-center" id="about">
-  <h2>About</h2>
-  <hr>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-</section>
+  <section class="container text-center" id="about">
+    <h2>About</h2>
+    <hr>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+  </section>
 
-<section class="container text-center" id="work">
-  <h2>Work</h2>
-  <hr>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-</section>
+  <section class="container text-center" id="work">
+    <h2>Work</h2>
+    <hr>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+  </section>
 
-<section class="container text-center" id="contact">
-  <h2>Contact</h2>
-  <hr>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-  <p>filler</p>
-</section>
+  <section class="container text-center" id="contact">
+    <h2>Contact</h2>
+    <hr>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+    <p>filler</p>
+  </section>
+  
+</main>
+
 {/body}

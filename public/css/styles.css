@@ -6,15 +6,28 @@ body {
 }
 
 h1 {
-    font-family: 'Corben', Georgia, Times, serif;
     font-size: 40px;
     line-height: 55px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Corben', Georgia, Times, serif;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 p {
     font-family: 'Nobile', Helvetica, Arial, sans-serif;
     font-size: 13px;
     line-height: 25px;
+}
+
+hr {
+    border-color: steelblue;
+    border-width: 2px;
 }
 
 .hero {
@@ -25,7 +38,7 @@ p {
     height: 800px;
 }
 
-.container {
+main.container {
     background-color: lightcoral;
 }
 
@@ -155,7 +168,7 @@ header {
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #000;
+    background-color: steelblue;
     visibility: hidden;
     -webkit-transform: scaleX(0);
     transform: scaleX(0);

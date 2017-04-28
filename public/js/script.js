@@ -11,12 +11,10 @@ $(function() {
         var target = this.hash;
         $target = $(target);
         $("html, body").stop().animate({
-            "scrollTop": $target.offset().top - 65
+            "scrollTop": $target.offset().top - 85
         }, 500, "swing", function() {
             window.location.hash = target;
             $(document).on("scroll", onScroll);
-            $("#header-container").addClass("fixed-header");
-            $("#access").addClass("menu-open");
         });
     });
 
@@ -28,14 +26,19 @@ $(function() {
 function onScroll(event) {
     var scrollPosition = $(document).scrollTop();
 
+    var heightOfHeader = $("#header-container").height();
+
     $("li.menu-item").each(function() {
         var $currentListElement = $(this);
         var refElementId = $currentListElement.find("a[href^='#']").attr("href");
 
         if (refElementId) {
             var $refElement = $(refElementId);
+            var $elementPrev = $refElement.prev();
+            var elementPrevBottom = $elementPrev.position().top + $elementPrev.height();
+            var isShowingSection = scrollPosition >= elementPrevBottom - heightOfHeader;
 
-            if ($refElement.position().top <= scrollPosition && $refElement.position().top + $refElement.height() > scrollPosition) {
+            if (isShowingSection) {
                 $("li.menu-item").removeClass("active");
                 $currentListElement.addClass("active");
             } else {

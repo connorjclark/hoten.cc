@@ -89,4 +89,7 @@ app.post('/contact', function(req, res) {
     });
 });
 
-app.listen(process.env.PORT || 3000);
+var port = process.env.PORT || 3000;
+console.log("listening on port " + port);
+
+app.listen(port);

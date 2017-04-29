@@ -17,10 +17,10 @@
       </div>
       <div class="menu-header">
         <ul id="menu-ish-nav" class="menu d-flex flex-column flex-md-row">
-          <li class="menu-item"><a href="#about">About</a></li>
           <li class="menu-item"><a href="#projects">Projects</a></li>
+          <li class="menu-item"><a href="#tech">Tech</a></li>
+          <li class="menu-item"><a href="#about">About</a></li>
           <li class="menu-item"><a href="#contact">Contact</a></li>
-          <li class="menu-item last-item"><a href="http://blog.cjamcl.com">Blog</a></li>
         </ul>
       </div>
     </nav>
@@ -37,6 +37,68 @@
 
 <main>
   <div></div>
+
+  <section class="container text-center" id="projects">
+    <h2 class="mt-5">Projects</h2>
+    <hr>
+
+    <div class="row justify-content-around">
+      <div class="card col-md-6">
+        <img class="card-img-top img-fluid rounded" src="/images/nasa.png" alt="Card image cap">
+        <div class="card-block">
+          <h4 class="card-title">SITT (NASA)</h4>
+          <h6 class="card-subtitle">Speech Intelligibility Testing Tool</h6>
+          <p class="card-text">Automates the creation, administration and scoring of SITs. Assesses the sound quality of communication hardware in extreme environments.</p>
+          <p class="card-text align-text-bottom"><small class="text-muted">Ruby On Rails</small></p>
+        </div>
+      </div>
+
+      <div class="card col-md-6">
+        <img class="card-img-top img-fluid rounded" src="/images/gridia.png" alt="Card image cap">
+        <div class="card-block">
+          <h4 class="card-title">Gridia</h4>
+          <h6 class="card-subtitle">Multiplayer online RPG</h6>
+          <p class="card-text">Online game with procedurally generated, persistent world. Highly configurable, focused on user driven content. In 2015, Gridia advanced to the semifinals of the US Imagine Cup, Microsoft's annual game design competition.</p>
+          <a href="http://cjamcl.com/gridia" class="btn btn-primary" target="_blank">See More</a>
+          <p class="card-text"><small class="text-muted">Java, C#, Groovy</small></p>
+        </div>
+      </div>
+
+      <div class="card col-md-6">
+        <img class="card-img-top img-fluid rounded" src="/images/as3.png" alt="Card image cap">
+        <div class="card-block">
+          <h4 class="card-title">as3unit</h4>
+          <h6 class="card-subtitle">Unit testing framework for ActionScript 3</h6>
+          <a href="https://github.com/hoten/as3unit" class="btn btn-primary" target="_blank">GitHub</a>
+          <p class="card-text"><small class="text-muted">AS3</small></p>
+        </div>
+      </div>
+
+      <div class="card col-md-6">
+        <img class="card-img-top img-fluid rounded" src="/images/oneup.jpg" alt="Card image cap">
+        <div class="card-block">
+          <h4 class="card-title">...more!</h4>
+
+          <a href="https://github.com/hoten" class="btn btn-primary" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container text-center" id="tech">
+    <h2 class="mt-5">Tech</h2>
+    <hr>
+
+    <div class="row justify-content-around">
+      {#tech}
+      <div class="col-4 col-lg-2 tech">
+        <img class="img-fluid rounded" src="{image}" alt="{title}">
+        <h4 class="tech-title text-center">{title|s}</h4>
+      </div>
+      {/tech}
+    </div>
+  </section>
+
   <section class="container text-center" id="about">
     <h2 class="mt-5">About</h2>
     <hr>
@@ -82,62 +144,6 @@
     </div>
   </section>
 
-  <section class="container text-center" id="projects">
-    <h2 class="mt-5">Projects</h2>
-    <hr>
-
-    
-
-    <div class="row justify-content-around">
-      <div class="card col-md-6">
-        <img class="card-img-top img-fluid rounded" src="/images/nasa.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">SITT (NASA)</h4>
-          <h6 class="card-subtitle">Speech Intelligibility Testing Tool</h6>
-          <p class="card-text">Automates the creation, administration and scoring of SITs. Assesses the sound quality of communication hardware in extreme environments.</p>
-          <p class="card-text align-text-bottom"><small class="text-muted">Ruby On Rails</small></p>
-        </div>
-      </div>
-
-      <div class="card col-md-6">
-        <img class="card-img-top img-fluid rounded" src="/images/gridia.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">Gridia</h4>
-          <h6 class="card-subtitle">Multiplayer online RPG</h6>
-          <p class="card-text">Online game with procedurally generated, persistent world. Highly configurable, focused on user driven content. In 2015, Gridia advanced to the semifinals of the US Imagine Cup, Microsoft's annual game design competition.</p>
-          <p class="card-text"><small class="text-muted">Java, C#, Groovy</small></p>
-        </div>
-      </div>
-
-      <div class="card col-md-6">
-        <img class="card-img-top img-fluid rounded" src="/images/as3.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">as3unit</h4>
-          <h6 class="card-subtitle">Unit testing framework for ActionScript 3</h6>
-          <p class="card-text"><small class="text-muted">Ruby On Rails</small></p>
-        </div>
-      </div>
-
-      <div class="card col-md-6">
-        <img class="card-img-top img-fluid rounded" src="/images/oneup.jpg" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">...more!</h4>
-
-          <a href="https://github.com/hoten" class="btn btn-primary" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-
-
-    </div>
-
-
-
-
-  </section>
-
-  
-
   <section class="container" id="contact">
     <h2 class="text-center mt-5">Contact</h2>
     <hr>
@@ -150,6 +156,10 @@
       <a class="btn btn-social-icon btn-github" target="_blank" href="https://github.com/hoten">
         <span class="fa fa-github"></span>
       </a>
+
+      <a class="btn btn-social-icon btn-success" target="_blank" href="/docs/resume.pdf">
+        <span>Resume</span>
+      </a>
     </div>
 
     <h3 class="text-center mt-3">Send me a message!</h3>
@@ -157,18 +167,18 @@
 
       <div class="form-group">
         <label for="inputEmail">Email address</label>
-        <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <input type="email" class="form-control" id="inputEmail" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
         <small id="emailHelp" class="form-text text-muted">I'll never share your email with anyone else.</small>
       </div>
 
       <div class="form-group">
         <label for="inputName">Name</label>
-        <input type="text" class="form-control" id="inputName" name="name" placeholder="Enter name">
+        <input type="text" class="form-control" id="inputName" name="name" placeholder="Enter name" required>
       </div>
 
       <div class="form-group">
         <label for="inputMessage">Message</label>
-        <textarea class="form-control" id="inputMessage" name="message" rows="3"></textarea>
+        <textarea class="form-control" id="inputMessage" name="message" rows="3" required></textarea>
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>

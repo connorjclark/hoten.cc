@@ -1,10 +1,12 @@
 var fs = require('fs');
+var parse = require('csv-parse/lib/sync');
 var async = require('async');
 var path = require("path");
 var kleiDust = require('klei-dust');
 var nodemailer = require("nodemailer");
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
+var favicon = require('serve-favicon');
 var express = require("express");
 var app = express();
 
@@ -12,6 +14,7 @@ app.engine('dust', kleiDust.dust);
 app.set('view engine', 'dust');
 app.set('view options', { layout: false });
 
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.urlencoded());
@@ -34,8 +37,16 @@ app.use(function(req, res, next) {
     next();
 });
 
+const tech = parse(fs.readFileSync("tech.csv")).map(function(row) {
+    return {
+        title: row[0],
+        image: row[1]
+    };
+});
+
+console.log(444);
 app.get("/", function(req, res) {
-    res.render("index");
+    res.render("index", { tech });
 });
 
 app.get("/terminal", function(req, res) {

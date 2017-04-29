@@ -28,7 +28,15 @@
 </div>
 
 <section class="hero">
+  <a href="/blog" class="btn btn-lg btn-info btn-blog"><i class="fa fa-long-arrow-right"></i> Enter Blog</a>
 
+  <div class="scroll text-center rounded-circle">
+    <a href="#education">
+      <i class="fa fa-long-arrow-down"></i>
+      <i class="fa fa-long-arrow-down"></i>
+      <i class="fa fa-long-arrow-down"></i>
+    </a>
+  </div>
 </section>
 
 <div id="scroll-top-detector">
@@ -36,7 +44,7 @@
 </div>
 
 <main>
-  <div class="education card card-block text-center container">
+  <div class="education card card-block text-center container" id="education">
     <h4 class="card-title"><u>Education</u></h4>
     <h1>B.S. Computer Science</h1>
     <h3>University of Houston</h3>
@@ -69,7 +77,7 @@
           <h4 class="card-title">Gridia</h4>
           <h6 class="card-subtitle">Multiplayer online RPG</h6>
           <p class="card-text">Online game with procedurally generated, persistent world. Highly configurable, focused on user driven content. In 2015, Gridia advanced to the semifinals of the US Imagine Cup, Microsoft's annual game design competition.</p>
-          <a href="http://cjamcl.com/gridia" class="btn btn-primary" target="_blank">See More</a>
+          <a href="/blog/gridia/" class="btn btn-primary" target="_blank">See More</a>
           <p class="card-text"><small class="text-muted">Java, C#, Groovy</small></p>
         </div>
       </div>

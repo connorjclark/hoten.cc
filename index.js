@@ -15,6 +15,7 @@ app.set('view engine', 'dust');
 app.set('view options', { layout: false });
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use("/blog", express.static(path.join(__dirname, "blog", "_site")));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.urlencoded());

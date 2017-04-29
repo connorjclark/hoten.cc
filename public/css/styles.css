@@ -374,3 +374,7 @@ blockquote p:after {
 .tech:hover img {
     opacity: 0.5;
 }
+
+.education p {
+    font-style: oblique;
+}

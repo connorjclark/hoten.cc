@@ -36,7 +36,17 @@
 </div>
 
 <main>
-  <div></div>
+  <div class="education card card-block text-center container">
+    <h4 class="card-title"><u>Education</u></h4>
+    <h1>B.S. Computer Science</h1>
+    <h3>University of Houston</h3>
+
+    <blockquote>
+      <p>
+        If I were to assemble a team of the best programmers to come out of the University of Houston, Connor would be on it
+      </p> --  <a href="https://twitter.com/pjdecarlo" target="_blank">Paul DeCarlo, Microsoft</a>
+    </blockquote>
+  </div>
 
   <section class="container text-center" id="projects">
     <h2 class="mt-5">Projects</h2>
@@ -129,18 +139,6 @@
         <img class="img-fluid img-thumbnail rounded" src="/images/space-needle.jpg" alt="My Dog Java">
         
       </div>
-    </div>
-
-    <div class="card card-block">
-      <h4 class="card-title"><u>Education</u></h4>
-      <h1>B.S. Computer Science</h1>
-      <h3>University of Houston</h3>
-
-      <blockquote>
-        <p>
-          If I were to assemble a team of the best programmers to come out of the University of Houston, Connor would be on it
-        </p> --  <a href="https://twitter.com/pjdecarlo" target="_blank">Paul DeCarlo, Microsoft</a>
-      </blockquote>
     </div>
   </section>
 

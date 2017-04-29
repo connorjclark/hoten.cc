@@ -25,6 +25,13 @@ $(function() {
     $("#menu-icon").on("click", function() {
         $("#access").toggleClass("menu-open");
     });
+
+    $.ajax({
+        url: "/terminal",
+        success: function(data) {
+            $(".hello-world").terminal(data).runCommand("cat hello");
+        }
+    });
 });
 
 function onScroll(event) {

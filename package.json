@@ -10,9 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.3.0",
+    "body-parser": "^1.17.1",
     "dustjs-linkedin": "^2.7.5",
     "express": "^4.15.2",
+    "express-session": "^1.15.2",
     "klei-dust": "^1.0.0",
+    "nodemailer": "^4.0.1",
     "path": "^0.12.7"
   }
 }

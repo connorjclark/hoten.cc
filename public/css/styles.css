@@ -5,6 +5,12 @@ body {
 */
 }
 
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .logo h1 {
     font-size: 2em;
 }
@@ -34,7 +40,7 @@ hr {
     background-position: 50% 50%;
     background-size: cover;
     background-image: url("/images/hero4.jpg");
-    height: 800px;
+    height: 700px;
 }
 
 main.container {
@@ -377,22 +383,4 @@ blockquote p:after {
 
 .education p {
     font-style: oblique;
-}
-
-.btn-blog {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 20px;
-}
-
-.scroll {
-    background-color: white;
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    width: 30px;
-    /*width: 40%;*/
-    margin: 20px auto;
 }

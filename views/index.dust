@@ -28,15 +28,6 @@
 </div>
 
 <section class="hero">
-  <a href="/blog" class="btn btn-lg btn-info btn-blog"><i class="fa fa-long-arrow-right"></i> Enter Blog</a>
-
-  <div class="scroll text-center rounded-circle">
-    <a href="#education">
-      <i class="fa fa-long-arrow-down"></i>
-      <i class="fa fa-long-arrow-down"></i>
-      <i class="fa fa-long-arrow-down"></i>
-    </a>
-  </div>
 </section>
 
 <div id="scroll-top-detector">
@@ -161,6 +152,10 @@
 
       <a class="btn btn-social-icon btn-github" target="_blank" href="https://github.com/hoten">
         <span class="fa fa-github"></span>
+      </a>
+
+      <a class="btn btn-social-icon btn-primary" target="_blank" href="/blog">
+        <span>Blog</span>
       </a>
 
       <a class="btn btn-social-icon btn-success" target="_blank" href="/docs/resume.pdf">

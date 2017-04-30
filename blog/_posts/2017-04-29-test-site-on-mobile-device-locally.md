@@ -1,9 +1,9 @@
 ---
-title: "Test your site on a mobile device locally."
-excerpt: When first starting out building responsibe web sites, you may find testing your sites on mobile devices to be cumbersome.
+title: "Test your site on a mobile device locally"
+excerpt: When first starting out building responsive web sites, you may find testing your sites on mobile devices to be cumbersome.
 ---
 
-When first starting out building responsibe web sites, you may find testing your sites on mobile devices to be cumbersome.
+When first starting out building responsive web sites, you may find testing your sites on mobile devices to be cumbersome.
 
 The problem lies with Chrome's developer tools (and others like it). It's a simulator, not an actual device, and a pretty poor one at that. You can trust it just as far as you can throw it (which you can't ... because it isn't a physical object ...).
 

@@ -1,5 +1,5 @@
 ---
-title: "Solve logic grid puzzles with answer set programming"
+title: "A gentle introduction to answer set programming"
 excerpt: "ASP is, in short, a programming paradigm that solves combinatoric problems given a set of rules. Users of Prolog will recognize the syntax and logic involved, but for everyone else, oh boy, *you got some learnin' to do*."
 ---
 

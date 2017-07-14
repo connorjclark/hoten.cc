@@ -2,5 +2,7 @@
 main:
   - title: "Main Site"
     url: /../
+  - title: "About"
+    url: /about
   - title: "Gridia"
     url: /gridia

@@ -16,7 +16,13 @@ I'll try my hand at introducing some of the concepts to you. At the end of the p
 # learn(asp).
 ___
 
-Facts are atomic, conditionless terms defined by the user.
+An AnsProlog program is made up of rules:
+
+```prolog
+<head> :- <body>.
+```
+
+If the head is empty, the `:-` symbol is dropped. Rules with only a body are called `facts`.
 
 ```prolog
 letter(a).
@@ -30,7 +36,9 @@ This can be shortened to:
 letter(a; b; c).
 ```
 
-This ASP program contains only one model in its answer set. Saving as `model.lp` and running `clingo model.lp 0` returns:
+> Sidenote: `letter` is a user-defined `predicate`. `Predicates` can contain any number of `atoms` (a, b, 1, 2, tom, etc.)
+
+This ASP program contains only one model in its answer set. Saving as `model.lp` and running `clingo model.lp 0` yields:
 
 ```
 clingo version 5.2.0

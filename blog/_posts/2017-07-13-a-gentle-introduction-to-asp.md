@@ -119,7 +119,7 @@ Feeding data into the visualizer, I get:
 ▓▓........▓▓..▓▓▓▓..
 ```
 
-Great. We've come up with a program that successfully searches the design space we defined above. Too bad it's not very interesting space.
+Great. We've come up with a program that successfully searches the design space we defined above. Too bad it's not a very interesting space.
 
 ## constrain!
 ___
@@ -153,7 +153,7 @@ ___
 
 Now, let's force all land cells to be connected (reachable by moving in a cardinal direction). This can be accomplished by establishing a starting point, creating a term `connected(X, Y)` if `land(X, Y)` is connected to that starting point, and requiring that all land terms are connected.
 
-One way to select the starting land cell is to set find the top-left most land. However, it is much simpler to define the middle as always land, and use that as the start.
+One way to select the starting land cell is to find the top-left most land. However, it is much simpler to define the middle as always land, and use that as the start.
 
 By definition, the start is connected to itself, so a connected term is emitted there.
 

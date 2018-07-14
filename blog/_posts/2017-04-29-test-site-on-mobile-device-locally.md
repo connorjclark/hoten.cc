@@ -16,7 +16,7 @@ So you gotta use an actual device. The cumbersome part for new developers is tha
 
 Pretty poor process. Not only are you mucking around in production just to test changes- this takes a long time!
 
-Instead, you can just run the site locally, as usual. If your mobile device and your computer are connected to the same network, you can simply connect to your computer using it's local IP address.
+Instead, you can just run the site locally, as usual. If your mobile device and your computer are connected to the same network, you can simply connect to your computer using its local IP address.
 
 In your terminal, type `ifconfig` or `ipconfig` (depending on your OS).
 

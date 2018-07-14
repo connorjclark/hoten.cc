@@ -1,0 +1,13 @@
+version: "3"
+services:
+  site:
+    command: bash -c 'rm -rf _site && jekyll serve --livereload'
+    image: jekyll/jekyll:3.8
+    volumes:
+      - $PWD/blog:/srv/jekyll
+      - $PWD/blog/vendor/bundle:/usr/local/bundle
+    ports:
+      - 4000:4000
+      - 35729:35729
+      - 3000:3000
+      -   80:4000

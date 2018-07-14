@@ -51,9 +51,9 @@ The contest results ended up something like this:
 |    6    |    0    |
 |    7    |    1    |
 
-With the contest rigged ever so slightly in my favor, I won the free thingy. The prize was a purple pair of Beats headphones, branded with Visual Studio's logo. They're not my favorite headphones, but I enjoy the conveneince. They're a good fit for my laptop go-bag since they fold up nicely.
+With the contest rigged ever so slightly in my favor, I won the free thingy. The prize was a purple pair of Beats headphones, branded with Visual Studio's logo. They're not my favorite headphones, but I enjoy the convenience. They're a good fit for my laptop go-bag since they fold up nicely.
 
-![My Free Thingy](/images/beats-vs.jpg)
+![My Free Thingy](/blog/images/beats-vs.jpg)
 
 [^1]: <http://www.ioccc.org/>
 [^2]: <https://github.com/CougarCS/mo-code-movember-2014>

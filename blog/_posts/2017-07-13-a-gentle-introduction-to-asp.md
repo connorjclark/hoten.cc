@@ -102,7 +102,7 @@ For every X, Y that there exists a term cell(X, Y) and no term water(X, Y), a la
 
 At this point, you should create a script to visualize the output to the program. You can find the python script I used for my visualizations at the bottom of this posting. I used `▓▓` for water and `..` for land.
 
-clingo outputs in json if your provide the option `--outf=2`. For every visualization, I run this command: `clingo model.lp 1 --sign-def=rnd --rand-freq=1 --seed=123 --outf=2 | python visualize.py`
+clingo outputs in json when given the option `--outf=2`. For every visualization, I run this command: `clingo model.lp 1 --sign-def=rnd --rand-freq=1 --seed=123 --outf=2 | python visualize.py`
 
 Feeding data into the visualizer, I get:
 
@@ -190,7 +190,7 @@ Conversely,
 `:- bad_condition`
 
 
-The non-first term there (`land(X, Y)`) acts as a binding variable- for every X, Y for which the term land(X, Y) exists, the good_condition (`connected(X, Y)`) must succeed.
+The second term there (`land(X, Y)`) acts as a binding variable- for every X, Y for which the term land(X, Y) exists, the good_condition (`connected(X, Y)`) must succeed.
 
 > Sidenote: I originally forgot that last line, and the first example I looked at for validating actually was all connected! However, it was wrong. It took awhile to realize my mistake, and after trying a second example the error was obvious. It's very, very important to iterate and validate carefully.
 

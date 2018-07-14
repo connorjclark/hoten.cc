@@ -1,7 +1,7 @@
 # main links links
 main:
-  - title: "Main Site"
-    url: /../
+  # - title: "Main Site"
+  #   url: /../
   - title: "About"
     url: /about
   - title: "Gridia"

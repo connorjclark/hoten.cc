@@ -1,5 +1,5 @@
 ---
-title: "Theia"
+title: "Announcing Theia"
 ---
 
 We at [Course Hero](https://www.coursehero.com/) are announcing the open release of [Theia](https://github.com/coursehero/theia), a framework for building, rendering, and caching React applications.

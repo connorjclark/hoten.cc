@@ -78,7 +78,7 @@ You can read this as "output a term `cell(X, Y)` if `row(X)` and `row(Y)` exists
 
 Similarly, "for every combination of row and col terms, bind their values to `X` and `Y`, and output a term `cell(X, Y)`"
 
-> Sidenote: `cell(1..5, 1..5)` would be more succint
+> Sidenote: `cell(1..10, 1..10)` would be more succint
 
 Let's generate terms for whether something is water or land. This is the first taste of the power of ASP. Everything before created just one single model, but no more.
 
@@ -88,9 +88,9 @@ Let's generate terms for whether something is water or land. This is the first t
 
 This construct is called a `choice rule`. Like a `proposition`, it will output the term on the LHS (left hand side) when conditions on the RHS are met. The difference is that the emitted terms are grouped as a *set*, and each possible subset of terms will be emitted in a different model.
 
-If you ran `clingo`, oops! There are 100 cells, and each cell can be in one of two states. You've given cling marching orders to generate 2^100 = 1,267,650,600,228,229,401,496,703,205,376 models. You can run `clingo model.lp 1` to instruct clingo that you only want a single model.
+If you ran `clingo`, oops! There are 100 cells, and each cell can be in one of two states. You've given clingo marching orders to generate 2^100 = 1,267,650,600,228,229,401,496,703,205,376 models. You can run `clingo model.lp 1` to instruct clingo that you only want a single model.
 
-The solver is deteriminstic, so it will always be the same model. You can modify this behavior by using additional arguements: `clingo blog.lp 1 --sign-def=rnd --rand-freq=1 --seed=123`. Providing different values for the seed will affect the solution you get.
+The solver is deterministic, so it will always be the same model. You can modify this behavior by using additional arguments: `clingo blog.lp 1 --sign-def=rnd --rand-freq=1 --seed=123`. Providing different values for the seed will affect the solution you get.
 
 Define a complementary term for land:
 

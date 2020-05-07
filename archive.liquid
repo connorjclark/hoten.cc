@@ -1,0 +1,31 @@
+---
+layout: default
+pagination:
+  data: collections.post
+  size: 2000 # totally punting
+  reverse: true
+  alias: posts
+---
+<style>
+  article h1 {
+    display: inline;
+  }
+
+  article span {
+    float: right;
+  }
+</style>
+
+{% for post in posts %}
+  <article>
+    <h1>
+      <a href="{{ post.url | url }}">{{ post.data.title }}</a>
+    </h1>
+    <span>
+      {{ post.date | dateReadable }}
+    </span>
+    <blockquote>
+      {% excerpt post %}
+    </blockquote>
+  </article>
+{% endfor %}

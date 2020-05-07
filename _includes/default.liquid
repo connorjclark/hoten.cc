@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5" />
+  <title>Connor Clark</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <header>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/gridia/">Gridia</a>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>
+    <a href="https://twitter.com/cjamcl">@cjamcl</a>
+  </footer>
+
+  {% if content contains '<code' %}
+    <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="/prism-atom-dark.css">
+    <link rel="stylesheet" media="(prefers-color-scheme: light)" href="/prism-vs.css">
+  {% endif %}
+</body>
+
+</html>

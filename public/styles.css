@@ -1,0 +1,76 @@
+/* https://colorhunt.co/palette/178387 */
+:root {
+  --body-background-color: #fcf8f3;
+  --body-text-color: black;
+  --blockquote-background-color: #fcf8f3;
+  --blockquote-border-color: #ffd3b6;
+}
+
+/* https://colorhunt.co/palette/136567 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background-color: #222831;
+    --body-text-color: #eeeeee;
+    --blockquote-background-color: #393e46;
+    --blockquote-border-color: #b55400;
+    --anchor-color: #ff7600;
+  }
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  background-color: var(--body-background-color);
+  color: var(--body-text-color);
+}
+
+header {
+  text-align: right;
+}
+
+@media only screen and (min-width: 600px) {
+  main {
+    padding-left: 15%;
+    padding-right: 15%;
+    margin: auto;
+  }
+}
+
+a {
+  color: var(--anchor-color);
+}
+
+img {
+  width: 100%;
+}
+
+pre {
+  background-color: var(--blockquote-background-color);
+  overflow: auto;
+  padding: 0 5px 0 5px;
+}
+
+blockquote {
+  background: var(--blockquote-background-color);
+  border-left: 10px solid var(--blockquote-border-color);
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+
+footer {
+  text-align: center;
+}

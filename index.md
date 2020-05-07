@@ -27,6 +27,12 @@ Hi, I'm Connor. I work on web performance tooling on Chrome (Lighthouse). I some
 
 Also, I'm working on a [game](/gridia).
 
+## Upcoming Thoughts
+
+* Running Chrome Dino Runner in Chrome DevTools
+* You Don't Know Chrome DevTools
+* HTML Source Maps
+
 ## Recent Thoughts
 
 {% for post in posts %}

@@ -7,14 +7,12 @@
 }
 
 /* https://colorhunt.co/palette/136567 */
-@media (prefers-color-scheme: dark) {
-  :root.dark {
-    --body-background-color: #222831;
-    --body-text-color: #eeeeee;
-    --blockquote-background-color: #393e46;
-    --blockquote-border-color: #b55400;
-    --anchor-color: #ff7600;
-  }
+:root.dark {
+  --body-background-color: #222831;
+  --body-text-color: #eeeeee;
+  --blockquote-background-color: #393e46;
+  --blockquote-border-color: #b55400;
+  --anchor-color: #ff7600;
 }
 
 html {

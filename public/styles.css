@@ -38,6 +38,10 @@ header {
   }
 }
 
+p {
+  margin: 25px 0 25px 0;
+}
+
 a {
   color: var(--anchor-color);
 }

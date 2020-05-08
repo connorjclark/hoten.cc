@@ -6,6 +6,23 @@
   <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=5" />
   <title>Connor Clark</title>
   <link rel="stylesheet" href="/styles.css">
+  <script>
+    // Dark mode looks so much better.
+    // if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // document.documentElement.classList.add('dark');
+    // }
+    const saved = localStorage.getItem('prefers-color-scheme');
+
+    if (saved === 'dark' || !saved) {
+      document.documentElement.classList.add('dark');
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.lightbulb').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('prefers-color-scheme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
+    });
+  </script>
 </head>
 
 <body>
@@ -13,6 +30,9 @@
     <a href="/">Home</a>
     <a href="/about/">About</a>
     <a href="/gridia/">Gridia</a>
+    <a href="#" class="lightbulb">
+      {{ '/public/lightbulb.svg' | svgContents }}
+    </a>
   </header>
   <main>
     {{ content | safe }}

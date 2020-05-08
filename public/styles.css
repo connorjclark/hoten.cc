@@ -8,7 +8,7 @@
 
 /* https://colorhunt.co/palette/136567 */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root.dark {
     --body-background-color: #222831;
     --body-text-color: #eeeeee;
     --blockquote-background-color: #393e46;
@@ -77,4 +77,14 @@ blockquote p {
 
 footer {
   text-align: center;
+}
+
+.lightbulb svg {
+  width: 20px;
+  height: 18px;
+  fill: currentColor;
+  color: black;
+}
+:root.dark .lightbulb svg {
+  color: white;
 }

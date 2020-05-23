@@ -1,5 +1,9 @@
 {
   "name": "hoten.cc",
+  "scripts": {
+    "build": "ELEVENTY_ENV=production eleventy",
+    "dev": "eleventy --serve"
+  },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",
     "@11ty/eleventy-plugin-rss": "^1.0.7",

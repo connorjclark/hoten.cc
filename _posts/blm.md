@@ -26,6 +26,8 @@ h2 {
 }
 </style>
 
+{% tweet "1266952531793416192" %}
+
 It's been tough viewing the footage from around the country these past few days. My goal with this page is to be a resource to send folks that may not be very tuned-into social media.
 
 > Let me say as I've always said, and I will always continue to say, that riots are socially destructive and self-defeating. ... But in the final analysis, a riot is the language of the unheard. And what is it that America has failed to hear? It has failed to hear that the plight of the Negro poor has worsened over the last few years. It has failed to hear that the promises of freedom and justice have not been met. And it has failed to hear that large segments of white society are more concerned about tranquility and the status quo than about justice, equality, and humanity. And so in a real sense our nation's summers of riots are caused by our nation's winters of delay. And as long as America postpones justice, we stand in the position of having these recurrences of violence and riots over and over again [–Martin Luther King Jr.]
@@ -34,8 +36,7 @@ Following, you'll find a collection of videos from the past few days. Please, ta
 
 But first, [learn](https://www.washingtonpost.com/news/powerpost/paloma/powerup/2020/05/28/powerup-racism-and-police-violence-in-spotlight-at-crucial-time-in-2020-race/5eced36688e0fa32f822be79/) that unarmed Black people are much more likely to be kiled than unarmed whites; [learn](https://mappingpoliceviolence.org/unarmed/) that cops rarely see any jail time for murdering unarmed Black people; and [learn](https://www.npr.org/2020/05/29/865261916/a-decade-of-watching-black-people-die) about the final moments of the men, women, and children whose lives were taken away by an overzealous, often racist, and at best incompetent cop.
 
-{% tweet "1266952531793416192" %}
-Note: Please consider donating to a cause listed in this tweet (click to see).
+Note: Please consider donating to a cause listed in this tweet (click to see). Check with your employer to see if they will match anything you give. I chose to donate $1000 to the [NAACP](https://naacp.org/make-donation-naacp/), which my employer matched.
 {% tweet "1266328844056825857" %}
 
 ## Listen

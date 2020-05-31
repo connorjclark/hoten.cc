@@ -1,7 +1,9 @@
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const moment = require('moment');
+// const dotenv = require('dotenv');
 
+// dotenv.config();
 moment.locale('en');
 
 function extractExcerpt(article) {
@@ -67,4 +69,21 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(syntaxHighlight);
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(require("eleventy-plugin-svg-contents"));
+
+  // NOTE: plugin only supported nunchunks, so manually use addShortcode.
+  // NOTE: doesn't work for dark mode
+  // NOTE: mp4s don't load.
+  // So.... basically just turn most of this off and use to fallback to client side api.
+  eleventyConfig.addShortcode('tweet', async (tweetId) => {
+    const options = {
+      // cacheDirectory: '.tweet-cache',
+      useInlineStyles: false,
+    };
+    let html = await require('eleventy-plugin-embed-tweet/twitter.js').getTweet(tweetId, options);
+    html = html.replace('<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>', '');
+    return html;
+  });
+  eleventyConfig.addShortcode('tweetStyles', () => {
+    return require('eleventy-plugin-embed-tweet/twitter.js').getStyles();
+  });
 };

@@ -2,7 +2,6 @@
 layout: post
 title: "Black Lives Matter"
 date: 2020-05-31
-hidden: true
 ---
 
 <style type="text/css">{% tweetStyles %}</style>

@@ -43,6 +43,7 @@ Note: Please consider donating to a cause listed in this tweet (click to see). C
 
 {% tweet "1266921926905286656" %}
 {% tweet "1266960975124717568" %}
+{% tweet "1267207824070893568" %}
 {% tweet "1266641724568453120" %}
 
 ## Peaceful protests

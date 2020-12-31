@@ -14,6 +14,10 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 [Gridia](https://hoten.cc/gridia/)–An MMO using web technologies.
 
+## Quest Maker
+
+[Quest Maker](https://hoten.cc/quest-maker/play/)–A web remake of [Zelda Classic](https://www.zeldaclassic.com/).
+
 ## CSS Trimmer
 
 [css-trimmer](https://github.com/connorjclark/css-trimmer)–Identifies unused properties in your CSS.

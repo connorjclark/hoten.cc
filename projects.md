@@ -12,7 +12,7 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 ## Gridia
 
-[hoten.cc](https://hoten.cc/gridia/)–An MMO using web technologies.
+[Gridia](https://hoten.cc/gridia/)–An MMO using web technologies.
 
 ## CSS Trimmer
 

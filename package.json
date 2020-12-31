@@ -2,7 +2,8 @@
   "name": "hoten.cc",
   "scripts": {
     "build": "ELEVENTY_ENV=production eleventy",
-    "dev": "eleventy --serve"
+    "dev": "eleventy --serve",
+    "deploy": "sh deploy/deploy.sh"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",

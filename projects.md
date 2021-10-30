@@ -10,25 +10,29 @@ Various things I've done.
 
 GitHub: [@connorjclark](https://github.com/connorjclark)
 
-## Gridia
+## Games
 
-[Gridia](https://hoten.cc/gridia/)–An MMO using web technologies.
+<hr>
 
-## Quest Maker
+### Gridia
+
+[Gridia](https://hoten.cc/gridia/)–An web-based Ultima-like MMO / MMO-engine.
+
+### Quest Maker
 
 [Quest Maker](https://hoten.cc/quest-maker/play/)–A web remake of [Zelda Classic](https://www.zeldaclassic.com/).
 
-## CSS Trimmer
+### Blocks
 
-[css-trimmer](https://github.com/connorjclark/css-trimmer)–Identifies unused properties in your CSS.
+[Blocks](https://hoten.cc/blocks/play/)–A Sokoban puzzle game.
 
-## Reddit Discuss
+## Websites
+
+<hr>
+
+### Reddit Discuss
 
 [www.redditdiscuss.com](https://www.redditdiscuss.com)–I watch a lot of TV, and for some shows I enjoy reading what other people thought of each episode. Googling "reddit Ozark season 3 episode 2" grew cumbersome, so I made this site.
-
-## Toccer
-
-[Toccer](https://github.com/connorjclark/toccer)–Generate a table of contents in markdown.
 
 ## Bigly URL
 
@@ -36,6 +40,18 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 [Source](https://github.com/connorjclark/biglyurl)
 
-## Theia
+## Developer Tools
+
+<hr>
+
+### Theia
 
 [Theia](https://github.com/coursehero/theia)–A SSR React framework.
+
+### CSS Trimmer
+
+[css-trimmer](https://github.com/connorjclark/css-trimmer)–Identifies unused properties in your CSS.
+
+### Toccer
+
+[Toccer](https://github.com/connorjclark/toccer)–Generate a table of contents in markdown.

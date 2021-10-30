@@ -26,6 +26,10 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 [Blocks](https://hoten.cc/blocks/play/)–A Sokoban puzzle game.
 
+### Fireworks
+
+[Fireworks](https://hoten.cc/fireworks/play/)–Fun with particles.
+
 ## Websites
 
 <hr>

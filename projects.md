@@ -26,6 +26,14 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 [Blocks](https://hoten.cc/blocks/play/)–A Sokoban puzzle game.
 
+### Breakout
+
+[Breakout](https://hoten.cc/breakout/play/)–Classic breakout game.
+
+### Life
+
+[Life](https://hoten.cc/life/play/)–Conway's Game of Life.
+
 ### Fireworks
 
 [Fireworks](https://hoten.cc/fireworks/play/)–Fun with particles.

@@ -2,3 +2,5 @@ gridia/play/
 quest-maker/
 blocks/
 fireworks/
+breakout/
+life/

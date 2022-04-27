@@ -1,6 +1,8 @@
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
+const pluginTOC = require('markdown-it-toc-done-right')
 const moment = require('moment');
+const slugify = require('slugify');
 // const dotenv = require('dotenv');
 
 // dotenv.config();
@@ -40,7 +42,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({'public': '.'});
 
   eleventyConfig.addFilter("slug", function(value) {
-    value = require('slugify').default(value, {
+    value = slugify.default(value, {
       replacement: "-",
       lower: true,
     });
@@ -60,7 +62,20 @@ module.exports = function (eleventyConfig) {
   const options = {
     html: true,
   };
-  const markdownLib = markdownIt(options).use(require("markdown-it-footnote"));
+  const mila = require("markdown-it-link-attributes");
+  const milaOptions = {
+    attrs: {
+      target: "_blank",
+      rel: "noopener noreferrer"
+    }
+  };
+
+  const slug = s => slugify(s).toLowerCase().replace(/,/g, '');
+  const markdownLib = markdownIt(options)
+    .use(mila, milaOptions)
+    .use(require("markdown-it-footnote"))
+    .use(require("markdown-it-anchor"), {slugify: slug})
+    .use(pluginTOC, {slugify: slug});
   
   eleventyConfig.setLibrary("md", markdownLib);
 

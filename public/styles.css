@@ -16,16 +16,25 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: 22px;
+  line-height: 1.4;
+  scroll-padding-top: 50px;
 }
 
 body {
   background-color: var(--body-background-color);
   color: var(--body-text-color);
+  margin: 0;
 }
 
 header {
   text-align: right;
+  position: sticky;
+  top: 0;
+  background-color: var(--body-background-color);
+  border-bottom: 1px solid var(--body-text-color);
+  padding: 5px 10px;
+  user-select: none;
 }
 
 header a:first-child {
@@ -49,7 +58,7 @@ a {
 }
 
 img {
-  width: 100%;
+  max-width: 100%;
 }
 
 pre {
@@ -62,11 +71,15 @@ blockquote {
   background: var(--blockquote-background-color);
   border-left: 10px solid var(--blockquote-border-color);
   margin: 1.5em 10px;
-  padding: 0.5em 10px;
+  padding: 1.0em 10px;
   quotes: "\201C""\201D""\2018""\2019";
 }
 blockquote p {
   display: inline;
+}
+
+pre[class*="language-"] {
+  font-size: 16px !important;
 }
 
 footer {
@@ -78,7 +91,24 @@ footer {
   height: 18px;
   fill: currentColor;
   color: black;
+  cursor: pointer;
 }
 :root.dark .lightbulb svg {
   color: white;
 }
+
+code {
+  background: var(--blockquote-border-color);
+}
+:root.dark code {
+  background: #1d1f21;
+}
+
+pre[class*="language-"] code {
+  color: unset;
+  background: unset;
+}
+
+/* ol { counter-reset: list-item; }
+li { display: block; counter-increment: list-item; }
+li:before { content: counters(list-item,'.') ' '; } */

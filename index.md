@@ -39,7 +39,6 @@ Also, I'm working on a [game](/gridia).
 ## Upcoming Thoughts
 
 * Playing Chrome Dino Runner in Chrome DevTools
-* You Don't Know Chrome DevTools
 * HTML Source Maps
 
 ## Recent Thoughts

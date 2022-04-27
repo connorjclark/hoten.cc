@@ -18,6 +18,10 @@ GitHub: [@connorjclark](https://github.com/connorjclark)
 
 [Gridia](https://hoten.cc/gridia/)–An web-based Ultima-like MMO / MMO-engine.
 
+### Zelda Classic
+
+[Zelda Classic](https://hoten.cc/zc/play/)–Zelda Classic built for the web via Emscripten.
+
 ### Quest Maker
 
 [Quest Maker](https://hoten.cc/quest-maker/play/)–A web remake of [Zelda Classic](https://www.zeldaclassic.com/).

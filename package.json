@@ -18,6 +18,6 @@
     "markdown-it-anchor": "^8.6.2",
     "markdown-it-footnote": "^3.0.2",
     "markdown-it-link-attributes": "^4.0.0",
-    "moment": "^2.25.3"
+    "moment": "^2.29.2"
   }
 }

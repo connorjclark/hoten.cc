@@ -4,4 +4,4 @@ blocks/
 fireworks/
 breakout/
 life/
-zc/
+/zc/

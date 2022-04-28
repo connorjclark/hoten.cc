@@ -40,7 +40,7 @@ It's a PWA, so you can also install it.
 
 <a href="https://hoten.cc/zc/create/?quest=classic/1st.qst&map=0&screen=119" target="_blank">
   <div class="captioned-image">
-    <img src="/images/zc/editor.png" alt="ZQuest editor opened to the starting screen of the original Zelda" width="50%">
+    <img style="max-width: min(700px, 100%)" src="/images/zc/editor.png" alt="ZQuest editor opened to the starting screen of the original Zelda">
     <span>ZQuest, the Zelda Classic quest editor</span>
   </div>
 </a>
@@ -59,7 +59,21 @@ I spent the last two months (roughly ~150 hours) porting Zelda Classic to run in
 
 There's a lot of quests to choose from, but here's just a small sampling!
 
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: baseline">
+<style>
+.grid-col2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+@media only screen and (max-width: 768px) {
+  .grid-col2 {
+    display: block;
+  }
+}
+</style>
+
+<div class="grid-col2">
 
 <a href="https://hoten.cc/zc/play/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst" target="_blank">
   <div class="captioned-image">
@@ -232,7 +246,7 @@ To support multiple platforms, Allegro abstracts anything OS-specific to a "syst
 This is the entire architecture of running Zelda Classic in a browser:
 
 <div class="captioned-image">
-  <img src="/images/zc/ascii-arch.png" alt="ASCII diagram of Zelda Classic running on the web" width="50%">
+  <img style="max-width: min(700px, 100%)" src="/images/zc/ascii-arch.png" alt="ASCII diagram of Zelda Classic running on the web">
   <span>🐢</span>
 </div>
 
@@ -620,8 +634,8 @@ EM_ASYNC_JS(void, em_init_fs_, (), {
 ```
 
 <div class="captioned-image">
-  <img src="/images/zc/filepicker.png" alt="" width="50%">
-  <span>The in-game file selector dialog. Quests are stored in their own folders such as: `_quests/1/OcarinaOfPower.qst`, requiring knowledge of where the quest you want is and multiple clicks to navigate to it</span>
+  <img style="max-width: min(700px, 100%)" src="/images/zc/filepicker.png" alt="">
+  <span>The in-game file selector dialog. Quests are stored in their own folders such as: <code>_quests/1/OcarinaOfPower.qst</code>, requiring knowledge of where the quest you want is and multiple clicks to navigate to it</span>
 </div>
 
 Just before Zelda Classic actually opens a file, `em_fetch_file_` is called and the data will be fetched and written to the filesystem.
@@ -740,7 +754,7 @@ TODO: confirm this bug still exists
 After all that, connecting a gamepad was working. The default joystick button mappings happened to be OK too, but I wanted to improve the existing Zelda Classic settings menu for configuring the gamepad controls: currently it gave no indication of what button an action is mapped to, only providing a button number (not a name). I found that Allegro does support a joystick button name api, so I used it but that didn't help so much:
 
 <div class="captioned-image">
-  <img src="/images/zc/buttons.png" alt="" width="50%">
+  <img style="max-width: min(700px, 100%)" src="/images/zc/buttons.png" alt="">
   <span>button button button button, button button, button 🦬</span>
 </div>
 

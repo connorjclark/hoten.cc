@@ -127,7 +127,7 @@ The rest of this article is an overview of the technical process of porting Zeld
 
 # Emscripten
 
-[Emscripten](https://emscripten.org/) is a compiler toolchain for building C/C++ to WebAssembly. The very TL;DR of how it works is that it uses `clang` to transform the resultant LLVM bytecode to Wasm. It's not enough to just compile code to Wasm–Emscripten also provides Unix runtime capabilities by implementing them with JavaScript/Web APIs (ex: implementations for most syscalls; an in-memory or IndexedDB-backed filesystem; pthreads support via Web Workers). Because many C/C++ projects are built with Make and CMake, Emscripten also provides tooling for interoping with those tools: `emmake` and `emcmake`.. For the most part, if a C/C++ program is portable, it can be built with Emscripten and run in a browser, although you'll like have to make changes to [accommodate the browser main loop](https://emscripten.org/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment).
+[Emscripten](https://emscripten.org/) is a compiler toolchain for building C/C++ to WebAssembly. The very TL;DR of how it works is that it uses `clang` to transform the resultant LLVM bytecode to Wasm. It's not enough to just compile code to Wasm–Emscripten also provides Unix runtime capabilities by implementing them with JavaScript/Web APIs (ex: implementations for most syscalls; an in-memory or IndexedDB-backed filesystem; pthreads support via Web Workers). Because many C/C++ projects are built with Make and CMake, Emscripten also provides tooling for interoping with those tools: `emmake` and `emcmake`. For the most part, if a C/C++ program is portable, it can be built with Emscripten and run in a browser, although you'll like have to make changes to [accommodate the browser main loop](https://emscripten.org/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment).
 
 > If you are developing a Wasm application, the Chrome DevTools DWARF extension is essential. See [this article](https://developer.chrome.com/blog/wasm-debugging-2020/) for how to use it. When it works, it's excellent. You may need to drop any optimization for best results. Even with no optimization pass, I often ran into cases where some frames of the call stacktrace were obviously wrong, so I sometimes had to resort to printf-style debugging.
 
@@ -169,11 +169,10 @@ void main()
 }
 ```
 
-Allegro passes a bitmap's texture to the shader as `al_tex`, and in this program that bitmap is just a bunch of numbers 0-255. Attached to the shader as an input is a palette of colors `pal`, and at runtime the program swaps out the palette, changing the colors rendered by the shader. There were two things wrong here that makes this shader not work in WebGL:
+Allegro passes a bitmap's texture to the shader as `al_tex`, and in this program that bitmap is just a bunch of numbers 0-255. Attached to the shader as an input is a palette of colors `pal`, and at runtime the program swaps out the palette, changing the colors rendered by the shader. There were two things wrong here that results in this shader not working in WebGL:
 
 1. It lacks a precision declaration. In WebGL, this is not optional. Very simple fix–just add `precision mediump float;`
-2. It uses a non-constant expression to index an array. WebGL does not support that, so the entire shader needed to be redesigned. This was more involved,
-   so I'll just like to the [PR](https://github.com/liballeg/allegro5/pull/1318)
+2. It uses a non-constant expression to index an array. WebGL does not support that, so the entire shader needed to be redesigned. This was more involved, so I'll just link to the [PR](https://github.com/liballeg/allegro5/pull/1318)
 
 The resulting program is hosted [here](https://tedious-porter.surge.sh/ex_palette.html).
 
@@ -184,7 +183,7 @@ Next I wanted to write a simple `CMakeLists.txt` that I could wrap my head aroun
 
 > Emscripten supports building projects configured with CMake via [`emcmake`](https://github.com/Emscripten-core/Emscripten/blob/main/emcmake.py), which is a small program that configures an Emscripten CMake [toolchain](https://github.com/Emscripten-core/Emscripten/blob/main/cmake/Modules/Platform/Emscripten.cmake). Essentially, running `emcmake cmake <path/to/source>` configures the build to use `emcc` as the compiler.
 
-I spent some time reading many tutorials on CMake, going through real-world `CMakeLists.txt` and trying to understand it all line-by-line. The CMake [documentation](https://cmake.org/cmake/help/latest/) was excellent during this process.
+I spent some time reading many tutorials on CMake, going through real-world `CMakeLists.txt` and trying to understand it all line-by-line. The CMake [documentation](https://cmake.org/cmake/help/latest/) was excellent during this process. Eventually, I ended up with this:
 
 [`https://github.com/connorjclark/allegro-project/blob/main/CMakeLists.txt`](https://github.com/connorjclark/allegro-project/blob/main/CMakeLists.txt)
 ```cmake
@@ -347,6 +346,8 @@ Emscripten can build multithreaded applications that work on the web by using We
 
 > For a deep dive on threads in Wasm, read [this](https://web.dev/webassembly-threads/)
 
+> `SharedArrayBuffer` requires special response headers to be set, even for localhost. The simplest way to do this is to use Paul Irish's [`stattik`](https://github.com/paulirish/statikk): just run `npx statikk --port 8000 --coi`
+
 In the above case, a thread is created which is expected to instantly set `_a5_display_creation_done`, but due to the lack of threads that never happens so the main thread is left hanging forever.
 
 Clearly, I needed to enable [`pthread`](https://emscripten.org/docs/porting/pthreads.html) support.
@@ -355,7 +356,7 @@ I figured it'd be best to also enable `PROXY_TO_PTHREAD`, which moves the main a
 
 > I got [close](https://github.com/emscripten-core/emscripten/issues/6009#issuecomment-1096131889) to getting `PROXY_TO_PTHREAD` to work, but not close enough.
 
-In lieu of this, I had to add `rest(0)` to many places where Zelda Classic busy waits on the main application thread, otherwise Emscripten's [`ASYNCIFY`](https://web.dev/asyncify/) feature has no opportunity to yield to the main thread to the browser, resulting in the page hanging. For example, this code is problematic to run on the main thread:
+In lieu of this, I had to add `rest(0)` to many places where Zelda Classic busy waits on the main application thread, otherwise Emscripten's [`ASYNCIFY`](https://web.dev/asyncify/) feature has no opportunity to yield the main thread back to the browser, resulting in the page hanging. For example, this code is problematic to run on the main thread:
 
 ```cpp
 do
@@ -376,8 +377,6 @@ do
 }
 while(gui_mouse_b());
 ```
-
-> `SharedArrayBuffer` requires special response headers to be set, even for localhost. The simplest way to do this is to use Paul Irish's [`stattik`](https://github.com/paulirish/statikk): just run `npx statikk --port 8000 --coi`
 
 # Of mutexes and deadlocks
 
@@ -432,9 +431,6 @@ but not when building for Mac. I reported the [bug](https://github.com/libsdl-or
 
 Eventually I realized it was odd that Emscripten doesn't support recursive mutexes. And sure enough, after writing a quick sample program, I determined [it actually does support them](https://github.com/libsdl-org/SDL/pull/5479#issuecomment-1089790046). Turns out the problem was in SDL's header configuration for Emscripten [not specifiying](https://github.com/libsdl-org/SDL/pull/5496) that recursive mutexes are supported.
 
-
-> Quest Maker
-
 # Playing MIDI with Timidity
 
 Zelda Classic `.qst` files contain MIDIs, but browsers can't directly play MIDI files. In order to synthesize audio from a MIDI file you need:
@@ -444,7 +440,7 @@ Zelda Classic `.qst` files contain MIDIs, but browsers can't directly play MIDI 
 
 Emscripten supports various audio formats with [`SDL_mixer`](https://emscripten.org/docs/getting_started/FAQ.html#what-are-my-options-for-audio-playback), configured via [`SDL2_MIXER_FORMATS`](https://emsettings.surma.technology/#SDL2_MIXER_FORMATS). However, there was no support for MIDI. Luckily `SDL_mixer` already supports MIDI playback (it uses [Timidity](https://github.com/SDL-mirror/SDL_mixer/tree/master/src/codecs/timidity#readme)). It was [straightfoward to configure the Emscripten port system](https://github.com/emscripten-core/emscripten/pull/16556) to include Timidity support when requested.
 
-As for the sound samples, I just grabbed some free ones called [freepats](https://www.npmjs.com/package/freepats). Initially I added them to the Wasm preload datafile, but it's actually pretty large at 30+ MB so a better solution is to load the individual samples from the network as requested. I knew of a [fork](https://github.com/feross/timidity) that did just that, so I studied how it worked there. When a MIDI file loads, that fork checks all the instruments a song will use and [logs which ones are missing](https://github.com/feross/timidity/commit/d1790eef24ff3b4067c536e45aa88c0863ad9676#diff-6ff6417493baaa56336d5c73f273ea180db9c16c2f4a37adf4f5abc380ffc6ccR207). Then the JS code checks that log, fetches the missing ones, and reloads the data. I basically did the same, but all within Timidity/`EM_JS`.
+As for the sound samples, I just grabbed some free ones called [freepats](https://www.npmjs.com/package/freepats). Initially I added them to the Wasm preload datafile, but it's actually pretty large at 30+ MB so a better solution is to load the individual samples from the network as requested. I knew of a Timidity [fork](https://github.com/feross/timidity) that did just that, so I studied how it worked there. When a MIDI file loads, that fork checks all the instruments a song will use and [logs which ones are missing](https://github.com/feross/timidity/commit/d1790eef24ff3b4067c536e45aa88c0863ad9676#diff-6ff6417493baaa56336d5c73f273ea180db9c16c2f4a37adf4f5abc380ffc6ccR207). Then the JS code checks that log, fetches the missing ones, and reloads the data. I basically did the same, but all within Timidity/`EM_JS`.
 
 These fetches freeze the game (but not the browser main thread!) until they complete, which isn't too bad when starting a quest but can be especially jarring when reaching a new area that plays a song with new MIDI instruments. To make this a bit more bearable, I wrote a [`fetchWithProgress`](https://gist.github.com/connorjclark/6afb9fb588331a23a2d8fa57cfefe8f5) function to display a progress bar in the page header.
 
@@ -452,7 +448,7 @@ TODO: mention how some instrument pat files were missing so i got more
 
 # Music working, but no SFX?
 
-Zelda Classic uses different output channels for music and SFX, which is pretty common in games. Especially because you may wish to sample the two at different rate, which means they can't use the same output channel. Music is typically sampled at a higher rate for quality purposes, which takes more processing time but that's OK because it is ok to buffer–latency isn't such a big deal, unless you're syncing music to video or something. SFX is typically sampled at a lower rate, because there is more urgency to play a sound effect in reaction to gameplay.
+Zelda Classic uses different output channels for music and SFX, which is pretty common in games. Especially because you may wish to sample the two at different rates, which means they can't use the same output channel. Music is typically sampled at a higher rate for quality purposes, which takes more processing time but that's OK because it is ok to buffer–latency isn't such a big deal, unless you're syncing music to video or something. SFX is typically sampled at a lower rate, because there is more urgency to play a sound effect in reaction to gameplay.
 
 With MIDI support included, music was now playing on the title screen, but no SFX was playing. I compiled the Allegro sound example [`ex_saw`](https://allegro5.org/examples/examples/ex_saw.html), which I knew already worked with Emscripten because the hosted example Wasm worked. However, building locally nothing would play, so I had another bug in Allegro to fix.
 
@@ -798,3 +794,6 @@ maybe cut. i hate thinking about pwas.
 # Future work
 
 TODO
+
+
+TODO: mention Quest Maker somewhere in intro?

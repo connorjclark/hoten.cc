@@ -1,4 +1,5 @@
 --- 
+title: Connor Clark
 layout: default 
 --- 
 # Connor Clark

@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "Porting Zelda Classic to the Web"
-date: 2022-04-28
-hidden: true
+date: 2022-04-29
 ---
 
 <style>
@@ -33,6 +32,12 @@ hidden: true
   stickyEl.classList.add('sticky');
   document.querySelector('article').append(stickyEl);
   function updateSticky() {
+    if (window.innerWidth < 900) {
+      stickyEl.hidden = true;
+      return;
+    }
+    stickyEl.hidden = false;
+
     const elements = [...document.querySelectorAll('h1, h2, h3')];
     const closest = elements.reduce((acc, cur) => {
       if (document.documentElement.scrollTop - cur.offsetTop + 70 < 0) return acc;
@@ -276,7 +281,7 @@ This is the entire architecture of running Zelda Classic in a browser:
 
 <div class="captioned-image">
   <img style="max-width: min(700px, 100%)" src="/images/zc/ascii-arch.png" alt="ASCII diagram of Zelda Classic running on the web">
-  <span>🐢</span>
+  <span>🐢 I've fixed/worked-around bugs in every layer of this.</span>
 </div>
 
 I used my newly wrangled working knowledge of CMake to configure Zelda Classic's `CMakeLists.txt` to build Allegro 5 & Allegro Legacy from source. Allegro Legacy was very nearly a drop-in replacement. I struggled initially with an "unresolved symbol" linker error, for a function I was certain was being included in the compilation, but this turned out to be a simple [oversight](https://github.com/NewCreature/Allegro-Legacy/pull/23) in a header file. Not really being a C/C++ guy this took me _way_ too long to debug!
@@ -475,7 +480,7 @@ As for the sound samples, I just grabbed some free ones called [freepats](https:
 
 These fetches freeze the game (but not the browser main thread!) until they complete, which isn't too bad when starting a quest but can be especially jarring when reaching a new area that plays a song with new MIDI instruments. To make this a bit more bearable, I wrote a [`fetchWithProgress`](https://gist.github.com/connorjclark/6afb9fb588331a23a2d8fa57cfefe8f5) function to display a progress bar in the page header.
 
-TODO: mention how some instrument pat files were missing so i got more
+> While freepats is nice (free, small, and good quality), it is [missing many instruments](https://freepats.zenvoid.org/SoundSets/general-midi.html#FreePatsGM). I found some [90s-era GUS sound files](https://www.doomworld.com/idgames/music/dgguspat) on a DOOM modding site to fill the gaps. There's a comment on that page suggesting the PPL160 is even better quality, so I [located](https://github.com/chocolate-doom/chocolate-doom/issues/878) those too. I'm not too happy with the result of [meshing](https://github.com/connorjclark/ZeldaClassic/blob/wasm-web/timidity/make-cfg.js) these various instruments together. I'm sure this could be improved, but at least no MIDI files will have missing instruments.
 
 ### Music working, but no SFX?
 
@@ -779,8 +784,7 @@ static bool sdl_init_joystick(void)
 
 For some unknown reason... all joystick events are ignored if there are no currently connected joysticks. The expectation in Allegro programs is to call  `al_reconfigure_joysticks` (which would call `sdl_init_joystick` again) when a joystick is added or removed to recreate the internal data structures, but a program never gets a chance to do so because Allegro's SDL joystick driver never forwards `SDL_JOYDEVICEADDED` events when no joysticks are present. [The fix](https://github.com/liballeg/allegro5/pull/1326) was straightforward: remove that unnecessary `count` guard, and fix a use-after-free bug from very unexpected behavior (to me, a web developer) of [`calloc`](https://en.cppreference.com/w/c/memory/calloc) when `0` is given as input.
 
-> I found an unfortunate bug in Firefox where my Xbox controller was being [improperly mapped](https://bugzilla.mozilla.org/show_bug.cgi?id=1763931).
-TODO: confirm this bug still exists
+> I found an unfortunate bug in Firefox where my Xbox controller is [improperly mapped](https://bugzilla.mozilla.org/show_bug.cgi?id=1763931).
 
 After all that, connecting a gamepad was working. The default joystick button mappings happened to be OK too, but I wanted to improve the existing Zelda Classic settings menu for configuring the gamepad controls: currently it gave no indication of what button an action is mapped to, only providing a button number (not a name). I found that Allegro does support a joystick button name api, so I used it but that didn't help so much:
 
@@ -843,3 +847,72 @@ Luckily Gamepads work just fine on mobile devices. Here's me playing with a wire
   <img src="/images/zc/gamepad.jpg" alt="" width="50%">
   <span>🥔📷 (had to use my webcam)</span>
 </div>
+
+### PWA
+
+I used the following [Workbox](https://developers.google.com/web/tools/workbox) config to generate a service worker:
+
+```js
+module.exports = {
+	runtimeCaching: [
+		{
+			urlPattern: /png|jpg|jpeg|svg|gif/,
+			handler: 'CacheFirst',
+		},
+		{
+			// Match everything except the wasm data file, which is cached in
+			// IndexedDB by emscripten.
+			urlPattern: ({ url }) => !url.pathname.endsWith('.data'),
+			handler: 'NetworkFirst',
+			options: {
+				matchOptions: {
+          // Otherwise the html page won't be cached (it can have query parameters).
+					ignoreSearch: true,
+				},
+			},
+		},
+	],
+	swDest: 'sw.js',
+	skipWaiting: true,
+	clientsClaim: true,
+	offlineGoogleAnalytics: true,
+};
+```
+
+This gets me offline support, although notably there is no precaching: I chose to avoid precaching because there's ~6GB of quest data which is fetched only when needed, so the user will need to load a particular quest while online at least once for it to work offline. So I didn't see the point in precaching any part of the webapp.
+
+With a service worker, and a [manifest.json](https://hoten.cc/zc/manifest.json), the webapp can be installed as a PWA. I listen for the `beforeinstallprompt` event to display my own install prompt:
+
+```js
+const installEl = document.createElement('button');
+installEl.textContent = 'Install as App';
+installEl.classList.add('panel-button');
+installEl.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+
+  const { outcome } = await deferredPrompt.prompt();
+  if (outcome === 'accepted') {
+    deferredPrompt = undefined;
+    installEl.textContent = 'Installed! Open from home screen for better experience';
+    setTimeout(() => installEl.remove(), 1000 * 5);
+  }
+});
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  document.querySelector('.panel-buttons').append(installEl);
+});
+```
+
+In Chrome, when a PWA is installed the view transitions to the fullscreen, standalone version of the app. Unfortunately on Android, when installed there is no such transition, which makes for an awkward flow (the user can choose to close the browser tab and hunt down the newly installed app, or they can continue in the current browser tab and on subsequent visits use the app entry).
+
+> Chrome 102 just landed, which introduces [`file_handlers`](https://blog.chromium.org/2022/04/chrome-102-window-controls-overlay-host.html#:~:text=File%20Handlers%20Web%20App%20Manifest%20Member). Definitely something I'll eventually add to handle opening `.qst` files from the OS!
+
+## Takeaways
+
+- As soon as you run into what seems like an intractable bug, stop trying to debug it from the context of your application and try to make a minimial reproduction. It will become easier to reason about the problem, and if the bug belongs to a dependency you will have a ready-made repro to provide in bug report.
+- File bug reports and upstream bug fixes when possible! But also, have _some way_ to tweak your dependencies, be it with hard forks or a patching system. You can't allow a bug in a dependency that you know how to resolve stall progress.
+- Break down problems with unknown solutions. For example, my first attempt at porting Zelda Classic was over a year ago, and that failed miserably because I jumped right into the end task of "actually port it", without first taking the time to really learn the tools involved, which resulted in me spinning my wheels. This time around, I avoided that by making my first task to fully understand how to port the simplest Allegro program.

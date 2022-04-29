@@ -62,6 +62,6 @@ Each player will have a place to call their own, to tend their own little garden
 
 <div class="images">
 {% for image in images %}
-  ![](https://i.imgur.com/{{ image }}.png)
+  ![](/images/gridia/{{ image }}.png)
 {% endfor %}
 </div>

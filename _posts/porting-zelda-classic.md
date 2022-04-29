@@ -637,7 +637,9 @@ echo "Done applying patches!"
 
 Up until now only the built-in original Zelda was playable. Now that I had sound working, I wanted to be able to play custom quests. From my previous work on Quest Maker, I had scraped 600+ quests and their metadata from PureZC.com. Quests are just single `.qst` files, and I needed a way to get Zelda Classic their data. Adding them to the `--preload-data` is not an option, because in total they are about 2 GB! No, each file needs to be loaded only upon request.
 
-When creating a new save file, you can select the quest file to use from a file selector dialog. In order to support that on the web, I needed to populate an empty file for every quest file so that the user could at least select it from this dialog. I have a metadata file of the [entire quest corpus](https://hoten.cc/quest-maker/play/quest-manifest.json) which I can use to seed the filesystem with empty files.
+> [Quest Maker](https://hoten.cc/quest-maker/play/) was my attempt at remaking Zelda Classic. Eventually I realized it would take 20 years to recreate a 20 year-old game engine, so I gave up.
+
+When creating a new save file, you can select the quest file to use from a file selector dialog. In order to support that on the web, I needed to populate an empty file for every quest file so that the user could at least select it from this dialog. To do that, I used a metadata file of the [entire quest corpus](https://hoten.cc/quest-maker/play/quest-manifest.json) to seed the filesystem with empty files.
 
 ```js
 // This function is called early on in main() setup.
@@ -722,19 +724,19 @@ I should mention, Zelda Classic has two separate code paths for music: one is fo
 
 So Emscripten + SDL_mixer handles everything but these retro formats. For that, Zelda Classic uses the [Game Music Emulator](https://bitbucket.org/mpyne/game-music-emu/src/master/) (GME) library. Luckily I found a fork of SDL_mixer called [SDL_mixer X](https://github.com/WohlSoft/SDL-Mixer-X) which integrates GME into SDL. It was pretty straightforward to grab that and merge the changes into the port that Emscriten uses. I also needed to add GME to Emscripten's port system, which was pretty [straightforward](https://gist.github.com/connorjclark/b9e0986c518d0193031c71181c8e2fd3).
 
-I sent SDL_mixer a [PR](https://github.com/libsdl-org/SDL_mixer/pull/378) for adding GME. If that gets merged, I'll also add a `gme` option to Emscripten. But for now, I'm just fine with my patching workflow.
+> I sent SDL_mixer a [PR](https://github.com/libsdl-org/SDL_mixer/pull/378) for adding GME. If that gets merged, I'll also add a `gme` option to Emscripten. But for now, I'm just fine with my patching workflow.
 
-As for `zcmusic`, I just had to implement the small API surface using SDL_mixer directly. The native version of the library brings in format-specific audio handling libraries, so it's actually much simpler now.
+As for `zcmusic`, I just had to implement the small API surface using SDL_mixer directly. The native version of the library brings in format-specific audio handling libraries, so it's actually much simpler now because SDL_mixer handles all that format-specific logic.
 
 ### Persisting data
 
-By default, all data written to Emscripten's filesystem is only held in memory, and is lost when refreshing the page. Emscripten provides a simple interface to [mount a folder backed by IndexedDB](https://emscripten.org/docs/api_reference/Filesystem-API.html#filesystem-api-idbfs), which solves the problem of persistence, but many still exist:
+By default, all data written to Emscripten's filesystem is only held in memory, and is lost when refreshing the page. Emscripten provides a simple interface to [mount a folder backed by IndexedDB](https://emscripten.org/docs/api_reference/Filesystem-API.html#filesystem-api-idbfs), which solves the problem of persistence, but many other issues still exist:
 
 1) Players of Zelda Classic have existing save files they may want to transfer into the browser
 2) Players will want access to these files (either to make backups or share them), but browsers don't expose IndexedDB to non-technical users
 3) Browsers avoid clearing data in IndexedDB if `navigator.storage.persist()` is called, but still: losing data such as save files (and especially a quest author's `.qst` file) is catastrophic, and I don't trust anything to live inside a browser forever
 
-Using the real filesystem would avoid all these issues. Luckily, there's been a lot of progress on this front in the last year: The [Filesystem Access API](https://web.dev/file-system-access/) provides a way to prompt a user to share a folder with a page, even allowing the page to write back to it. Given `window.showDirectoryPicker()`, the browser opens a file/folder dialog prompt and the user's selection is given as a `FileSystemDirectoryHandle`.
+Using the real filesystem would avoid all these issues. Luckily, there's been a lot of progress on this front in the last year: The [Filesystem Access API](https://web.dev/file-system-access/) provides a way to prompt a user to share a folder with a page, even allowing the page to write back to it. Given `window.showDirectoryPicker()`, the browser opens a folder dialog prompt and the user's selection is given as a `FileSystemDirectoryHandle`.
 
 > The only annoyance is that permission doesn't persist across multiple sessions, and even opening the permission prompt is (understandably) gated behind user interaction, so every subsequent visit I must show the user a permission flow. At the very least, the `FileSystemDirectoryHandle` can be cached in IndexedDB so the user doesn't need to specify which folder to use every time.
 
@@ -742,7 +744,7 @@ Unfortunately only Chromium browsers have implemented `window.showDirectoryPicke
 
 > [The Origin Private Filesystem](https://wicg.github.io/file-system-access/#sandboxed-filesystem) provides an origin-unique directory handle via `navigator.storage.getDirectory()`. The spec defines this folder to not necessarily map to real files on disk, so this is not viable for Zelda Classic
 
-Emscripten did not provide an interface for mounting a `FileSystemDirectoryHandle` to its own filesystem, so I wrote one myself. The existing IndexedDB interface is very similar to what I needed, and handles the logic of syncing deltas both ways rather nicely, so I based my interface on that. This seems like it'd be really useful for others, so I sent a [patch to Emscripten](https://github.com/emscripten-core/emscripten/pull/16804).
+Emscripten did not provide an interface for mounting a `FileSystemDirectoryHandle` to its own filesystem, so I wrote one myself. The existing IndexedDB interface is very similar to what I needed, and handles the logic of syncing deltas both ways rather nicely, so I based my interface on that. This seems like it'd be really useful to others, so I sent a [patch to Emscripten](https://github.com/emscripten-core/emscripten/pull/16804).
 
 While I'm happy I can provide an ideal persistence story in Chromium, I still had to do something for other browsers. IndexedDB + `navigator.storage.persist()` isn't the worst thing in the world, but I needed to solve issues 1 and 2 above. To that end, a user can:
 
@@ -753,7 +755,7 @@ While I'm happy I can provide an ideal persistence story in Chromium, I still ha
 
 Zelda Classic is certainly playable with the keyboard, but it also supports gamepads. And so does the web and Emscripten! I was hopeful that things would "just work" here. I bought myself a nice Xbox controller to test things out and... nada. I noticed that the gamepad would only connect if I actively twiddled with its inputs while the page loaded. The bug could have been anywhere: Emscripten, my controller, SDL, Allegro, Allegro Legacy... so the first task was to narrow down a repro.
 
-I wrote a quick [SDL program](https://gist.github.com/connorjclark/0b7268acd6bfa324c4db38dde7928110) that prints when a joystick connects and disconnects. I compiled with Emscripten, loaded the page and it worked. So that just left Allegeo/Allegro Legacy as the culprits. I did notice a difference between running when compiled for Mac vs for the web: On Mac, SDL detects a joystick immediately, but in the browser detection only happens after the first input on the controller. This is by design–the purpose is to [avoid a potential vector for fingerprinting](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API#:~:text=In%20Firefox%2C%20gamepads-,are%20only%20exposed,-to%20a%20page).
+I wrote a quick [SDL program](https://gist.github.com/connorjclark/0b7268acd6bfa324c4db38dde7928110) that prints when a joystick connects and disconnects. I compiled with Emscripten, loaded the page and it worked. So that just left Allegro/Allegro Legacy as the culprits. I did notice a difference between running when compiled for Mac vs for the web: On Mac, SDL detects a joystick immediately, but in the browser detection only happens after the first input on the controller. This is by design–the purpose is to [avoid a potential vector for fingerprinting](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API#:~:text=In%20Firefox%2C%20gamepads-,are%20only%20exposed,-to%20a%20page).
 
 So that was a big clue–Allegro works only when twiddling the input at start up because it must be mishandling joysticks that are connected post-initialization. Pulling up [Allegro's SDL interface for joysticks](https://github.com/liballeg/allegro5/blob/668a0a35afd4132dfeb86325d8f3e3c10628b529/src/sdl/sdl_joystick.c), a variable `count` jumps out:
 
@@ -775,7 +777,7 @@ static bool sdl_init_joystick(void)
 }
 ```
 
-For some unknown reason... all joystick events are ignored if there are no currently connected joysticks. The intention in Allegro is to call  `al_reconfigure_joysticks` (which would call `sdl_init_joystick` again) when a joystick is added or removed to recreate the internal data structures, but a program never gets a chance to do so because Allegro's SDL joystick driver never forwards `SDL_JOYDEVICEADDED` events when no joysticks are present. [The fix](https://github.com/liballeg/allegro5/pull/1326) was straightforward: remove that unnecessary `count` guard, and fix a use-after-free bug from very unexpected behavior (to me, a web developer) of [`calloc`](https://en.cppreference.com/w/c/memory/calloc) when `0` is given as input.
+For some unknown reason... all joystick events are ignored if there are no currently connected joysticks. The expectation in Allegro programs is to call  `al_reconfigure_joysticks` (which would call `sdl_init_joystick` again) when a joystick is added or removed to recreate the internal data structures, but a program never gets a chance to do so because Allegro's SDL joystick driver never forwards `SDL_JOYDEVICEADDED` events when no joysticks are present. [The fix](https://github.com/liballeg/allegro5/pull/1326) was straightforward: remove that unnecessary `count` guard, and fix a use-after-free bug from very unexpected behavior (to me, a web developer) of [`calloc`](https://en.cppreference.com/w/c/memory/calloc) when `0` is given as input.
 
 > I found an unfortunate bug in Firefox where my Xbox controller was being [improperly mapped](https://bugzilla.mozilla.org/show_bug.cgi?id=1763931).
 TODO: confirm this bug still exists
@@ -805,22 +807,39 @@ diff --git a/src/sdl/sdl_joystick.c b/src/sdl/sdl_joystick.c
     SDL_JoystickEventState(SDL_ENABLE);
 ```
 
-> I was curious how SDL could determine what the button names are, given that the Gamepads Web API has nothing for "give me the name of this button". Turns out, SDL uses the gamepad's device id (which the Web API does expose) to map known gamepads to a "standard" button layout. One such database can be found [here](https://github.com/gabomdq/SDL_GameControllerDB/blob/master/gamecontrollerdb.txt) (but I think SDL ships with a much smaller set). These configurations are meant for standardizing rando gamepads to a sensible layout (such that the "right-side bottom button" has the same value to SDL independent of the gamepad hardware), but it also doubles as a button name store.
+> I was curious how SDL could determine what the button names are, given that the Gamepad Web API has nothing for "give me the name of this button". Turns out, SDL uses the gamepad's device id (which the Web API does expose) to map known gamepads to a "standard" button layout. One such database can be found [here](https://github.com/gabomdq/SDL_GameControllerDB/blob/master/gamecontrollerdb.txt) (but I think SDL ships with a much smaller set). These configurations are meant for standardizing rando gamepads to a sensible layout (such that the "right-side bottom button" has the same value to SDL independent of the gamepad hardware), but it also doubles as a button name store.
 
 ### Mobile support
 
-TODO
+<div class="captioned-image">
+  <img src="/images/zc/mobile.png" alt="" width="50%">
+  <span>Very basic touch controls</span>
+</div>
 
-### PWA
+I thought it'd be cool to support mobile, but I didn't want to spend a lot of time on making touch controls feel good so the end result is a pretty subpar. The most tedious part was getting the browser `touch` events to work just-right. Actually fowarding them as events to Allegro was just a matter of exposing a C function to JavaScript that emitted a fake Allegro user event:
 
-TODO.
-and offline.
+```cpp
+bool has_init_fake_key_events = false;
+ALLEGRO_EVENT_SOURCE fake_src;
+extern "C" void create_synthetic_key_event(ALLEGRO_EVENT_TYPE type, int keycode)
+{
+  if (!has_init_fake_key_events)
+  {
+    al_init_user_event_source(&fake_src);
+    a5_keyboard_queue_register_event_source(&fake_src);
+    has_init_fake_key_events = true;
+  }
 
-maybe cut. i hate thinking about pwas.
+  ALLEGRO_EVENT event;
+  event.any.type = type;
+  event.keyboard.keycode = keycode;
+  al_emit_user_event(&fake_src, &event, NULL);
+}
+```
 
-## Future work
+Luckily Gamepads work just fine on mobile devices. Here's me playing with a wireless Xbox controller on my phone:
 
-TODO
-
-
-TODO: mention Quest Maker somewhere in intro?
+<div class="captioned-image">
+  <img src="/images/zc/gamepad.jpg" alt="" width="50%">
+  <span>🥔📷 (had to use my webcam)</span>
+</div>

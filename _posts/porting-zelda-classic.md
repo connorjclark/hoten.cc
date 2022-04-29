@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Porting Zelda Classic to the Web"
-date: 2022-04-27
+date: 2022-04-28
 hidden: true
 ---
 
@@ -19,7 +19,31 @@ hidden: true
   .captioned-image span {
     text-align: center;
   }
+
+  .sticky {
+    position: sticky;
+    top: 0;
+    font-size: 1.17em;
+    font-weight: bold;
+    z-index: 2;
+  }
 </style>
+<script>
+  const stickyEl = document.createElement('div');
+  stickyEl.classList.add('sticky');
+  document.querySelector('article').append(stickyEl);
+  function updateSticky() {
+    const elements = [...document.querySelectorAll('h1, h2, h3')];
+    const closest = elements.reduce((acc, cur) => {
+      if (document.documentElement.scrollTop - cur.offsetTop + 70 < 0) return acc;
+      return document.documentElement.scrollTop - cur.offsetTop > document.documentElement.scrollTop - acc.offsetTop ? acc : cur;
+    });
+    stickyEl.hidden = closest === elements[0];
+    stickyEl.textContent = closest.textContent;
+  }
+  document.addEventListener('scroll', updateSticky);
+  document.addEventListener('hashchange', updateSticky);
+</script>
 
 <div class="captioned-image">
   <img src="/images/zc/Mitchfork.png" alt="">
@@ -28,15 +52,17 @@ hidden: true
 
 <!-- Excerpt Start -->
 
-TL;DR I ported Zelda Classic to the web. You can play it [here](https://hoten.cc/zc/play/)–grab a gamepad if you have one!
+I ported Zelda Classic to the web. You can play it [here](https://hoten.cc/zc/play/)–grab a gamepad if you have one!
 
 It's a PWA, so you can also install it.
 
 <!-- Excerpt End -->
 
+I've written some <a href="#zelda-classic">background information</a> on Zelda Classic, and chronicled <a href="#porting-zelda-classic-to-the-web">the technical process</a> of porting a large C++ codebase to the web using WebAssembly.
+
  ${toc}
 
-# Background
+# Zelda Classic
 
 <a href="https://hoten.cc/zc/create/?quest=classic/1st.qst&map=0&screen=119" target="_blank">
   <div class="captioned-image">
@@ -53,7 +79,7 @@ If you are a fan of the original 2D Zelda games, I believe you'll find many Zeld
 
 However, the most recent version of Zelda Classic only supports Windows... until now!
 
-# Zelda Classic: On the Web
+## On the Web
 
 I spent the last two months (roughly ~150 hours) porting Zelda Classic to run in a web browser.
 
@@ -119,19 +145,23 @@ There's a lot of quests to choose from, but here's just a small sampling!
 
 </div>
 
-I hope my efforts result in Zelda Classic reaching a larger audience. It's been challenging work, far outside my comfort zone of web development, and I've learned a lot about WebAssembly, CMake and multithreading. Along the way, I discovered bugs across multiple projects and did due diligence in fixing (or just reporting) them when I could, and even proposed a <a href="#improving-thread-debugging">change to the HTML spec</a>.
+I hope my efforts result in Zelda Classic reaching a larger audience. It's been challenging work, far outside my comfort zone of web development, and I've learned a lot about WebAssembly, CMake and multithreading. Along the way, I discovered bugs across multiple projects and did due diligence in fixing (or just reporting) them when I could, and even proposed a <a href="https://github.com/whatwg/html/issues/7838" target="_blank">change to the HTML spec</a>.
+
+# Porting Zelda Classic to the Web
 
 The rest of this article is an overview of the technical process of porting Zelda Classic to the web.
 
 > If you're interested in the minutia, I've made [my daily notes](https://docs.google.com/document/d/1tOI1k9nSWDxmHXoW-yy4fk3_7AbS6vCk3UUG2iCwS_g) available. This was the first time I kept notes like this, and I found the process improved my working memory significantly... and it definitely helped me write this article.
 
-# Emscripten
+## Getting it working
+
+### Emscripten
 
 [Emscripten](https://emscripten.org/) is a compiler toolchain for building C/C++ to WebAssembly. The very TL;DR of how it works is that it uses `clang` to transform the resultant LLVM bytecode to Wasm. It's not enough to just compile code to Wasm–Emscripten also provides Unix runtime capabilities by implementing them with JavaScript/Web APIs (ex: implementations for most syscalls; an in-memory or IndexedDB-backed filesystem; pthreads support via Web Workers). Because many C/C++ projects are built with Make and CMake, Emscripten also provides tooling for interoping with those tools: `emmake` and `emcmake`. For the most part, if a C/C++ program is portable, it can be built with Emscripten and run in a browser, although you'll like have to make changes to [accommodate the browser main loop](https://emscripten.org/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment).
 
 > If you are developing a Wasm application, the Chrome DevTools DWARF extension is essential. See [this article](https://developer.chrome.com/blog/wasm-debugging-2020/) for how to use it. When it works, it's excellent. You may need to drop any optimization for best results. Even with no optimization pass, I often ran into cases where some frames of the call stacktrace were obviously wrong, so I sometimes had to resort to printf-style debugging.
 
-# Starting off
+### Starting off
 
 Zelda Classic is written in C++ and uses Allegro, a low-level cross platform library for window management, drawing to the screen, playing sounds, etc. Well, it actually uses Allegro 4, released circa 2007. Allegro 4 does not readily compile with Emscripten, but Allegro 5 does. The two versions are vastly different but fortunately there is an adapter library called Allegro Legacy which allows an Allegro 4 application to be built using Allegro 5.
 
@@ -141,7 +171,7 @@ So that's the first hurdle–Zelda Classic needs to be ported to Allegro 5, and 
 
 Before working on any of that directly, I needed to address my lack of knowledge of CMake and Allegro.
 
-# Learning CMake, Allegro, and Emscripten
+### Learning CMake, Allegro, and Emscripten
 
 Allegro claims to support Emscripten, but I wanted to confirm it for myself. Luckily they provided some [instructions](https://github.com/liballeg/allegro5/blob/master/README_sdl.txt#L30) on how to build with Emscripten. My first PRs were to Allegro to improve this documentation.
 
@@ -229,7 +259,7 @@ file(COPY ${allegro5_SOURCE_DIR}/addons/primitives/allegro5/allegro_primitives.h
 
 Initally I tried using CMake's [`ExternalProject`](https://cmake.org/cmake/help/latest/module/ExternalProject.html) instead of [`FetchContent`](https://cmake.org/cmake/help/latest/module/FetchContent.html), but the former was problematic with Emscripten because it runs `cmake` under the hood, and it seemed like it was not aware of the toolchain that `emcmake` provides. I don't know why I couldn't get it to work, but I know `FetchContent` is the newer of the two and I had better luck with it.
 
-# Allegro Legacy
+### Allegro Legacy
 
 Allegro 4 and 5 can be considered entirely different libraries:
 
@@ -255,7 +285,7 @@ Once things actually linked and compilation was successful, Allegro Legacy _just
 
 > I sent a [PR for upgrading to Allegro 5](https://github.com/ArmageddonGames/ZeldaClassic/pull/774) to the Zelda Classic repro, but I expect it will remain unmerged until a future major release.
 
-# Starting to build Zelda Classic with Emscripten
+### Starting to build Zelda Classic with Emscripten
 
 Even though Zelda Classic was now on A5 and building it from source, there were still a few pre-built libraries being used for music. I didn't want to deal with this yet, so to start I stubbed out the music layer with dummy functions so everything would still link with Emscripten.
 
@@ -298,7 +328,7 @@ fi
 
 > I also sent a [PR to Emscripten](https://github.com/emscripten-core/emscripten/pull/16807) to fix the above
 
-# Let there be threads
+### Let there be threads
 
 As soon as I got Zelda Classic building with Emscripten and running in a browser, I'm faced with a page that does nothing but busy-hangs the main thread. Pausing in DevTools shows the problem:
 
@@ -339,8 +369,7 @@ static BITMAP * a5_display_init(int w, int h, int vw, int vh, int color_depth)
 }
 ```
 
-> The busy-wait while loop pattern is problematic because it spins the CPU and wastes cycles. However, in this case it's actually pretty OK because the initialization code is expected the finish quickly. In general, a [condition variable](https://www.ibm.com/docs/en/aix/7.1?topic=programming-using-condition-variables) is preferred to allow the thread to sleep until the state it cares about changes.
-
+> The busy-wait while loop pattern is problematic because it spins the CPU and wastes cycles. However, in this case it's actually pretty OK because the initialization code is expected to finish quickly. In general, a [condition variable](https://www.ibm.com/docs/en/aix/7.1?topic=programming-using-condition-variables) is preferred to allow the thread to sleep until the state it cares about changes.
 
 Emscripten can build multithreaded applications that work on the web by using Web Workers and `SharedArrayBuffer`, but by default it will not build with thread support, so everything happens on the main thread.
 
@@ -378,7 +407,7 @@ do
 while(gui_mouse_b());
 ```
 
-# Of mutexes and deadlocks
+### Of mutexes and deadlocks
 
 The most difficult problem I ran into during this entire project was debugging a deadlock. It took a few days of getting nowhere, logging when a lock was acquired/released and by what thread (big waste of time!)
 
@@ -431,7 +460,9 @@ but not when building for Mac. I reported the [bug](https://github.com/libsdl-or
 
 Eventually I realized it was odd that Emscripten doesn't support recursive mutexes. And sure enough, after writing a quick sample program, I determined [it actually does support them](https://github.com/libsdl-org/SDL/pull/5479#issuecomment-1089790046). Turns out the problem was in SDL's header configuration for Emscripten [not specifiying](https://github.com/libsdl-org/SDL/pull/5496) that recursive mutexes are supported.
 
-# Playing MIDI with Timidity
+## Getting it fully functional
+
+### Playing MIDI with Timidity
 
 Zelda Classic `.qst` files contain MIDIs, but browsers can't directly play MIDI files. In order to synthesize audio from a MIDI file you need:
 
@@ -446,7 +477,7 @@ These fetches freeze the game (but not the browser main thread!) until they comp
 
 TODO: mention how some instrument pat files were missing so i got more
 
-# Music working, but no SFX?
+### Music working, but no SFX?
 
 Zelda Classic uses different output channels for music and SFX, which is pretty common in games. Especially because you may wish to sample the two at different rates, which means they can't use the same output channel. Music is typically sampled at a higher rate for quality purposes, which takes more processing time but that's OK because it is ok to buffer–latency isn't such a big deal, unless you're syncing music to video or something. SFX is typically sampled at a lower rate, because there is more urgency to play a sound effect in reaction to gameplay.
 
@@ -491,7 +522,7 @@ EMSCRIPTENAUDIO_Init(SDL_AudioDriverImpl * impl)
 
 Thinking "no way this will work", I set that to `SDL_FALSE` and ... it worked! I reported this as a bug [here](https://github.com/libsdl-org/SDL/issues/5485). It's not so obvious that this is the proper way to fix this, so this won't be actually resolved in SDL for a bit. Which leads me to the next topic...
 
-# Build script hacking
+### Build script hacking
 
 When you fix a bug in a dependency, there is typically a waiting period before a new version of that dependency can be used normally. This is not a problem because there are other ways to use a non-official version of a dependency:
 
@@ -600,7 +631,9 @@ apply_patch _deps/allegro5-src "$SCRIPT_DIR/allegro5.patch" $NO_GIT_CLEAN
 echo "Done applying patches!"
 ```
 
-# Quest List
+## Making it awesome
+
+### Quest List
 
 Up until now only the built-in original Zelda was playable. Now that I had sound working, I wanted to be able to play custom quests. From my previous work on Quest Maker, I had scraped 600+ quests and their metadata from PureZC.com. Quests are just single `.qst` files, and I needed a way to get Zelda Classic their data. Adding them to the `--preload-data` is not an option, because in total they are about 2 GB! No, each file needs to be loaded only upon request.
 
@@ -676,7 +709,7 @@ You can also get a deep link to open a specific screen in the editor:
 
 [https://hoten.cc/zc/create/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&map=0&screen=55](https://hoten.cc/zc/create/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&map=0&screen=55)
 
-# MP3s, and OGGs and retro music
+### MP3s, and OGGs and retro music
 
 OK, so remember when I did all the fake `zcmusic` stuff, just to get things building and punt the prebuilt sound library stuff? Well, eventually I realized that SDL_mixer supports OGG and MP3 so it should be straight-forward to implement `zcmusic` using SDL_mixer. SDL_mixer and Emscripten have the know-how to synthesize these various audio formats, so I don't need to work out how to compile these audio libraries myself.
 
@@ -693,7 +726,7 @@ I sent SDL_mixer a [PR](https://github.com/libsdl-org/SDL_mixer/pull/378) for ad
 
 As for `zcmusic`, I just had to implement the small API surface using SDL_mixer directly. The native version of the library brings in format-specific audio handling libraries, so it's actually much simpler now.
 
-# Persisting data
+### Persisting data
 
 By default, all data written to Emscripten's filesystem is only held in memory, and is lost when refreshing the page. Emscripten provides a simple interface to [mount a folder backed by IndexedDB](https://emscripten.org/docs/api_reference/Filesystem-API.html#filesystem-api-idbfs), which solves the problem of persistence, but many still exist:
 
@@ -716,7 +749,7 @@ While I'm happy I can provide an ideal persistence story in Chromium, I still ha
 1) download any individual file backed by IndexedDB
 2) perform a one-way upload of a file or an entire folder into the browser ([`browser-fs-access`](https://web.dev/browser-fs-access/) helped here)
 
-# Gamepads
+### Gamepads
 
 Zelda Classic is certainly playable with the keyboard, but it also supports gamepads. And so does the web and Emscripten! I was hopeful that things would "just work" here. I bought myself a nice Xbox controller to test things out and... nada. I noticed that the gamepad would only connect if I actively twiddled with its inputs while the page loaded. The bug could have been anywhere: Emscripten, my controller, SDL, Allegro, Allegro Legacy... so the first task was to narrow down a repro.
 
@@ -774,24 +807,18 @@ diff --git a/src/sdl/sdl_joystick.c b/src/sdl/sdl_joystick.c
 
 > I was curious how SDL could determine what the button names are, given that the Gamepads Web API has nothing for "give me the name of this button". Turns out, SDL uses the gamepad's device id (which the Web API does expose) to map known gamepads to a "standard" button layout. One such database can be found [here](https://github.com/gabomdq/SDL_GameControllerDB/blob/master/gamecontrollerdb.txt) (but I think SDL ships with a much smaller set). These configurations are meant for standardizing rando gamepads to a sensible layout (such that the "right-side bottom button" has the same value to SDL independent of the gamepad hardware), but it also doubles as a button name store.
 
-# Mobile support
+### Mobile support
 
 TODO
 
-# Improving thread debugging
-
-TODO
-
-https://github.com/whatwg/html/issues/7838
-
-# PWA
+### PWA
 
 TODO.
 and offline.
 
 maybe cut. i hate thinking about pwas.
 
-# Future work
+## Future work
 
 TODO
 

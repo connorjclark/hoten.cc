@@ -35,6 +35,7 @@ header {
   border-bottom: 1px solid var(--body-text-color);
   padding: 5px 10px;
   user-select: none;
+  z-index: 1;
 }
 
 header a:first-child {
@@ -109,6 +110,6 @@ pre[class*="language-"] code {
   background: unset;
 }
 
-/* ol { counter-reset: list-item; }
-li { display: block; counter-increment: list-item; }
-li:before { content: counters(list-item,'.') ' '; } */
+.table-of-contents > ol {
+  list-style-type: upper-roman;
+}

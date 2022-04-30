@@ -88,7 +88,7 @@ However, the most recent version of Zelda Classic only supports Windows... until
 
 I spent the last two months (roughly ~150 hours) porting Zelda Classic to run in a web browser.
 
-There's a lot of quests to choose from, but here's just a small sampling!
+There's a lot of quests to choose from, but here's just a small sampling! Click any of these to jump into the quest:
 
 <style>
 .grid-col2 {

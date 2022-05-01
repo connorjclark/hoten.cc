@@ -490,7 +490,7 @@ With MIDI support included, music was now playing on the title screen, but no SF
 
 I added some printf'ing to `SDL_SetError` and noticed that when Allegro called `SDL_Init(SDL_INIT_EVERYTHING)`, it would error with `"SDL not built with haptic support"` ... and then SDL would proceed to tear everything down! SDL failed to setup the haptic subsystem because it does not provide an Emscripten implementation for it. And since Allegro initialized SDL by requesting everything, SDL could not comply. That doesn't explain why it was working before but isn't today–to explain that, I `git blame`'d the `SDL_Init` function and saw that a change was made recently to shutdown everything if any subsystem errors. Mystery solved, and I sent a [PR](https://github.com/liballeg/allegro5/pull/1322) to Allegro to fix it.
 
-```cpp
+```diff-cpp
 diff --git a/src/sdl/sdl_system.c b/src/sdl/sdl_system.c
 --- a/src/sdl/sdl_system.c
 +++ b/src/sdl/sdl_system.c
@@ -795,7 +795,7 @@ After all that, connecting a gamepad was working. The default joystick button ma
 
 The problem was that Allegro's SDL joystick interface didn't know about SDL's API for getting a button name. [The fix](https://github.com/liballeg/allegro5/pull/1327) was simple:
 
-```cpp
+```diff-cpp
 diff --git a/src/sdl/sdl_joystick.c b/src/sdl/sdl_joystick.c
 --- a/src/sdl/sdl_joystick.c
 +++ b/src/sdl/sdl_joystick.c

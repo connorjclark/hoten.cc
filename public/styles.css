@@ -113,3 +113,25 @@ pre[class*="language-"] code {
 .table-of-contents > ol {
   list-style-type: upper-roman;
 }
+
+
+.token.deleted {
+  background-color: hsl(350deg 100% 88% / 20%);
+}
+.token.inserted {
+  background-color: hsl(120deg 73% 75% / 20%);
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+}

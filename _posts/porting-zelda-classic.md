@@ -65,6 +65,8 @@ It's a PWA, so you can also install it.
 
 I've written some <a href="#zelda-classic">background information</a> on Zelda Classic, and chronicled <a href="#porting-zelda-classic-to-the-web">the technical process</a> of porting a large C++ codebase to the web using WebAssembly.
 
+> Follow [Zelda Classic on Twitter](https://twitter.com/zelda_classic)!
+
  ${toc}
 
 # Zelda Classic

@@ -57,7 +57,7 @@ date: 2022-04-29
 
 <!-- Excerpt Start -->
 
-I ported Zelda Classic to the web. You can play it [here](https://hoten.cc/zc/play/)–grab a gamepad if you have one!
+I ported Zelda Classic (a game engine based on the original Zelda) to the web. You can play it [here](https://hoten.cc/zc/play/)–grab a gamepad if you have one!
 
 It's a PWA, so you can also install it.
 

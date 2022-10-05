@@ -11,9 +11,9 @@ This is not one of those stories.
 
 This code challenge came up during Mo' Code Movember,[^2] a small hackathon that took place in Nov. 2014. A Microsoft representative (shout out to Paul DeCarlo)[^3] had some goodies to give away. He came up with this challenge:
 
->Every participant will be assigned a unique number (from 1 to n, the number of participants). Each person must submit a program, in the language of their choice, that generates a random number from 1 to n. Whomever's number comes up the most wins. The catch - everyone can review your code. If your code is identified as anything other than a fair number generator, you get disqualified. Code reviewers cannot run the program. Incorrect accusers are also disqualified.
+>Every participant will be assigned a unique number (from 1 to n, the number of participants). Each person must submit a program, in the language of their choice, that generates a random number from 1 to n. Whomever's number comes up the most wins. The catch - everyone can review your code. If your code is identified as anything other than a fair number generator, you get disqualified. Code reviewers cannot run the program. Incorrect accusers are also disqualified.
 
-So, with the problem at hand, and assigned the number 5, I decided to use Java. I fired up Netbeans and created a new project. This was my main file, and what I showed to my code reviewers:
+So, with the problem at hand, and assigned the number 5, I decided to use Java. I fired up Netbeans and created a new project. This was my main file, and what I showed to my code reviewers:
 
 ```java
 package random;

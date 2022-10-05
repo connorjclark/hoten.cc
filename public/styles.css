@@ -100,6 +100,7 @@ footer {
 
 code {
   background: var(--blockquote-border-color);
+  font-family: monospace;
 }
 :root.dark code {
   background: #1d1f21;

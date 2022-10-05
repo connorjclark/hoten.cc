@@ -1,3 +1,5 @@
+@import url('https://fontlibrary.org/face/dejavu-sans-mono');
+
 /* https://colorhunt.co/palette/178387 */
 :root {
   --body-background-color: #fcf8f3;
@@ -100,7 +102,7 @@ footer {
 
 code {
   background: var(--blockquote-border-color);
-  font-family: monospace;
+  font-family: 'Dejavu Sans Mono', monospace;
 }
 :root.dark code {
   background: #1d1f21;

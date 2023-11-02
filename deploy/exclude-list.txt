@@ -5,3 +5,5 @@ fireworks/
 breakout/
 life/
 /zc/
+/zc-debug/
+/tmp/

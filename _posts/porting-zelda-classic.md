@@ -15,6 +15,9 @@ date: 2022-04-29
   .captioned-image img {
     /* width: 50%; */
   }
+  img {
+    image-rendering: pixelated;
+  }
   .captioned-image span {
     text-align: center;
   }
@@ -50,6 +53,8 @@ date: 2022-04-29
   document.addEventListener('hashchange', updateSticky);
 </script>
 
+> Nov 27, 2023: Much has changed since this article was published. I've become far more involved with ZC development; the name of the program is now ZQuest Classic; our website is [zquestclassic.com](https://zquestclassic.com/); and the web version discussed in this article is now hosted at [web.zquestclassic.com](https://web.zquestclassic.com/play/)
+
 <div class="captioned-image">
   <img src="/images/zc/Mitchfork.png" alt="">
   <span>Mitchfork's winning screenshot from the <a href="https://www.purezc.net/forums/index.php?showtopic=77409" target="_blank">2021 Screenshot of the Year contest</a></span>
@@ -57,7 +62,7 @@ date: 2022-04-29
 
 <!-- Excerpt Start -->
 
-I ported Zelda Classic (a game engine based on the original Zelda) to the web. You can play it [here](https://hoten.cc/zc/play/)–grab a gamepad if you have one!
+I ported Zelda Classic (a game engine based on the original Zelda) to the web. You can play it [here](https://web.zquestclassic.com/play/)–grab a gamepad if you have one!
 
 It's a PWA, so you can also install it.
 
@@ -71,9 +76,9 @@ I've written some <a href="#zelda-classic">background information</a> on Zelda C
 
 # Zelda Classic
 
-<a href="https://hoten.cc/zc/create/?quest=classic/1st.qst&map=0&screen=119" target="_blank">
+<a href="https://web.zquestclassic.com/create/?open=quests/purezc/773/r01/1st-mirrored-vertical-and-horizontal.qst&map=0&screen=8" target="_blank">
   <div class="captioned-image">
-    <img style="max-width: min(700px, 100%)" src="/images/zc/editor.png" alt="ZQuest editor opened to the starting screen of the original Zelda">
+    <img style="max-width: min(700px, 100%)" src="/images/zc/editor.png" alt="ZQuest editor opened to the starting screen of the original Zelda (but mirrored!)">
     <span>ZQuest, the Zelda Classic quest editor</span>
   </div>
 </a>
@@ -108,42 +113,42 @@ There's a lot of quests to choose from, but here's just a small sampling! Click 
 
 <div class="grid-col2">
 
-<a href="https://hoten.cc/zc/play/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst" target="_blank">
+<!-- <a href="https://web.zquestclassic.com/play/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst" target="_blank">
   <div class="captioned-image">
     <img src="https://hoten.cc/quest-maker/play/zc_quests/bs3.1/image1.png" alt="" width="100%">
     <span>BS Zelda 1st Quest</span>
   </div>
-</a>
+</a> -->
 
-<a href="https://hoten.cc/zc/play/?quest=373/Quest.qst" target="_blank">
+<a href="https://web.zquestclassic.com/play/?open=quests/purezc/373&name=Links-Quest-for-the-Hookshot-2-Quest" target="_blank">
   <div class="captioned-image">
     <img src="/images/zc/hookshot-title.png" alt="" width="100%">
     <span>Link's Quest for the Hookshot 2</span>
   </div>
 </a>
 
-<a href="https://hoten.cc/zc/play/?quest=139/HeroOfDreams.qst" target="_blank">
+<a href="https://web.zquestclassic.com/play/?open=quests/purezc/139" target="_blank">
   <div class="captioned-image">
     <img src="/images/zc/hod.gif" alt="" width="100%">
     <span>Hero of Dreams</span>
   </div>
 </a>
 
-<a href="https://hoten.cc/zc/play/?quest=731/GoGollab_1_FunnyEdition.qst" target="_blank">
+<!-- <a href="https://web.zquestclassic.com/play/?open=quests/purezc/731" target="_blank">
   <div class="captioned-image">
     <img src="/images/zc/gollab.png" alt="" width="100%">
     <span>Go Gollab: The Conflictions of Morality</span>
   </div>
-</a>
+</a> -->
 
-<a href="https://hoten.cc/zc/play/?quest=751/LoL+New+Legacy.qst" target="_blank">
+<a href="https://web.zquestclassic.com/play/?open=quests/purezc/751" target="_blank">
   <div class="captioned-image">
     <img src="/images/zc/new-legacy.png" alt="" width="100%">
     <span>Legend of Link: The New Legacy</span>
   </div>
 </a>
 
-<a href="https://hoten.cc/zc/play/?quest=152/cashaunt2.qst" target="_blank">
+<a href="https://web.zquestclassic.com/play/?open=quests/purezc/152&name=Castle-Haunt-II" target="_blank">
   <div class="captioned-image">
     <img src="https://hoten.cc/quest-maker/play/zc_quests/152/image0.gif" alt="" width="100%">
     <span>Castle Haunt II</span>
@@ -706,17 +711,17 @@ for (const extraResourceUrl of quest.extraResources || []) {
 
 But this file selector dialog is _really awkward_ to use. Let's leverage one of the web's superpowers here: the URL. I created a "Quest List" directory that presents a `Play!` link:
 
-[https://hoten.cc/zc/play/?quest=731/GoGollab_1_FunnyEdition.qst](https://hoten.cc/zc/play/?quest=731/GoGollab_1_FunnyEdition.qst)
+[https://web.zquestclassic.com/play/?open=purezc/quests/731/](https://web.zquestclassic.com/play/?open=purezc/quests/731/)
 
 and in Zelda Classic I grabbed that query parameter and hacked away at the title screen code to either 1) start a new save file with the quest or 2) load an existing save file of that quest. This makes it simpler than ever to jump into a Zelda Classic quest.
 
 Zelda Classic's editor has a testing feature that allows a quest editor to jump into the game at the current screen they are editing. Natively, that's done with command line arguments, but to do the same for the web we have our friend the URL. Click this URL and you'll find yourself at the end of the game!
 
-[https://hoten.cc/zc/play/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&dmap=9&screen=58](https://hoten.cc/zc/play/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&dmap=9&screen=58)
+[https://web.zquestclassic.com/play/?test=/quests/purezc/373/r01/Quest.qst&dmap=16&screen=65](https://web.zquestclassic.com/play/?test=/quests/purezc/373/r01/Quest.qst&dmap=16&screen=65)
 
 You can also get a deep link to open a specific screen in the editor:
 
-[https://hoten.cc/zc/create/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&map=0&screen=55](https://hoten.cc/zc/create/?quest=bs3.1/NewBS+3.1+-+1st+Quest.qst&map=0&screen=55)
+[https://web.zquestclassic.com/create/?open=quests/purezc/373/r01/Quest.qst&map=3&screen=65](https://web.zquestclassic.com/create/?open=quests/purezc/373/r01/Quest.qst&map=3&screen=65)
 
 ### MP3s, and OGGs and retro music
 
@@ -883,7 +888,7 @@ module.exports = {
 
 This gets me offline support, although notably there is no precaching: I chose to avoid precaching because there's ~6GB of quest data which is fetched only when needed, so the user will need to load a particular quest while online at least once for it to work offline. So I didn't see the point in precaching any part of the webapp.
 
-With a service worker, and a [manifest.json](https://hoten.cc/zc/manifest.json), the webapp can be installed as a PWA. I listen for the `beforeinstallprompt` event to display my own install prompt:
+With a service worker, and a [manifest.json](https://web.zquestclassic.com/manifest.json), the webapp can be installed as a PWA. I listen for the `beforeinstallprompt` event to display my own install prompt:
 
 ```js
 const installEl = document.createElement('button');

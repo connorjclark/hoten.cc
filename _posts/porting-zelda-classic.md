@@ -169,7 +169,7 @@ The rest of this article is an overview of the technical process of porting Zeld
 
 ### Emscripten
 
-[Emscripten](https://emscripten.org/) is a compiler toolchain for building C/C++ to WebAssembly. The very TL;DR of how it works is that it uses `clang` to transform the resultant LLVM bytecode to Wasm. It's not enough to just compile code to Wasm–Emscripten also provides Unix runtime capabilities by implementing them with JavaScript/Web APIs (ex: implementations for most syscalls; an in-memory or IndexedDB-backed filesystem; pthreads support via Web Workers). Because many C/C++ projects are built with Make and CMake, Emscripten also provides tooling for interoping with those tools: `emmake` and `emcmake`. For the most part, if a C/C++ program is portable, it can be built with Emscripten and run in a browser, although you'll like have to make changes to [accommodate the browser main loop](https://emscripten.org/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment).
+[Emscripten](https://emscripten.org/) is a compiler toolchain for building C/C++ to WebAssembly. The very TL;DR of how it works is that it uses `clang` to transform the resultant LLVM bytecode to Wasm. It's not enough to just compile code to Wasm–Emscripten also provides Unix runtime capabilities by implementing them with JavaScript/Web APIs (ex: implementations for most syscalls; an in-memory or IndexedDB-backed filesystem; pthreads support via Web Workers). Because many C/C++ projects are built with Make and CMake, Emscripten also provides wrappers for those tools: `emmake` and `emcmake`. For the most part, if a C/C++ program is portable, it can be built with Emscripten and run in a browser, although you'll likely have to make changes to [accommodate the browser main loop](https://emscripten.org/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment).
 
 > If you are developing a Wasm application, the Chrome DevTools DWARF extension is essential. See [this article](https://developer.chrome.com/blog/wasm-debugging-2020/) for how to use it. When it works, it's excellent. You may need to drop any optimization for best results. Even with no optimization pass, I often ran into cases where some frames of the call stacktrace were obviously wrong, so I sometimes had to resort to printf-style debugging.
 
@@ -179,7 +179,7 @@ Zelda Classic is written in C++ and uses Allegro, a low-level cross platform lib
 
 So that's the first hurdle–Zelda Classic needs to be ported to Allegro 5, and its CMakeLists.txt needs to be modified to build allegro from source.
 
-> Allegro 5 is able to support building with Emscripten because it can use [SDL](https://github.com/libsdl-org/SDL) as its backend, which Emscripten supports well.
+> Allegro 5 supports building with Emscripten because it can use [SDL](https://github.com/libsdl-org/SDL) as its backend, which Emscripten supports well.
 
 Before working on any of that directly, I needed to address my lack of knowledge of CMake and Allegro.
 
@@ -295,7 +295,7 @@ I used my newly wrangled working knowledge of CMake to configure Zelda Classic's
 
 Once things actually linked and compilation was successful, Allegro Legacy _just worked_, although I fixed some minor bugs related to [sticky mouse input](https://github.com/NewCreature/Allegro-Legacy/pull/21) and [file paths](https://github.com/NewCreature/Allegro-Legacy/pull/24).
 
-> I sent a [PR for upgrading to Allegro 5](https://github.com/ArmageddonGames/ZeldaClassic/pull/774) to the Zelda Classic repro, but I expect it will remain unmerged until a future major release.
+> I sent a [PR for upgrading to Allegro 5](https://github.com/ZQuestClassic/ZQuestClassic/pull/774) to the Zelda Classic repro, but I expect it will remain unmerged until a future major release.
 
 ### Starting to build Zelda Classic with Emscripten
 
@@ -468,7 +468,7 @@ SDL_LockMutex(SDL_mutex * mutex)
 
 Once I realized that the deadlock did not happen when condition variables were not used, I was able to create a small reproduction that resulted in a deadlock via Emscripten
 but not when building for Mac. I reported the [bug](https://github.com/libsdl-org/SDL/issues/5428) to SDL, and even proposed a [patch](https://github.com/libsdl-org/SDL/pull/5479) to improve the fake recursive mutex code,
-(at least, it fixed my deadlock) but it turns out that mixing condtion variables and recursive mutexes is a [very bad idea](https://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_mutexattr_settype.html#:~:text=It%20is%20advised%20that%20an%20application%20should%20not%20use), and in general is [impossible](https://github.com/libsdl-org/SDL/pull/5479#issuecomment-1090221325) to get right.
+(at least, it fixed my deadlock) but it turns out that mixing condition variables and recursive mutexes is a [very bad idea](https://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_mutexattr_settype.html#:~:text=It%20is%20advised%20that%20an%20application%20should%20not%20use), and in general is [impossible](https://github.com/libsdl-org/SDL/pull/5479#issuecomment-1090221325) to get right.
 
 Eventually I realized it was odd that Emscripten doesn't support recursive mutexes. And sure enough, after writing a quick sample program, I determined [it actually does support them](https://github.com/libsdl-org/SDL/pull/5479#issuecomment-1089790046). Turns out the problem was in SDL's header configuration for Emscripten [not specifiying](https://github.com/libsdl-org/SDL/pull/5496) that recursive mutexes are supported.
 
@@ -493,7 +493,7 @@ These fetches freeze the game (but not the browser main thread!) until they comp
 
 Zelda Classic uses different output channels for music and SFX, which is pretty common in games. Especially because you may wish to sample the two at different rates, which means they can't use the same output channel. Music is typically sampled at a higher rate for quality purposes, which takes more processing time but that's OK because it is ok to buffer–latency isn't such a big deal, unless you're syncing music to video or something. SFX is typically sampled at a lower rate, because there is more urgency to play a sound effect in reaction to gameplay.
 
-With MIDI support included, music was now playing on the title screen, but no SFX was playing. I compiled the Allegro sound example [`ex_saw`](https://allegro5.org/examples/examples/ex_saw.html), which I knew already worked with Emscripten because the hosted example Wasm worked. However, building locally nothing would play, so I had another bug in Allegro to fix.
+With MIDI support included, music was now playing on the title screen, but no SFX was playing. I compiled the Allegro sound example [`ex_saw`](https://allegro5.org/examples/examples/ex_saw.html), which I knew already worked with Emscripten because the hosted example Wasm worked. However, building locally no sound would play, so I had another bug in Allegro to fix.
 
 I added some printf'ing to `SDL_SetError` and noticed that when Allegro called `SDL_Init(SDL_INIT_EVERYTHING)`, it would error with `"SDL not built with haptic support"` ... and then SDL would proceed to tear everything down! SDL failed to setup the haptic subsystem because it does not provide an Emscripten implementation for it. And since Allegro initialized SDL by requesting everything, SDL could not comply. That doesn't explain why it was working before but isn't today–to explain that, I `git blame`'d the `SDL_Init` function and saw that a change was made recently to shutdown everything if any subsystem errors. Mystery solved, and I sent a [PR](https://github.com/liballeg/allegro5/pull/1322) to Allegro to fix it.
 
@@ -711,7 +711,7 @@ for (const extraResourceUrl of quest.extraResources || []) {
 
 But this file selector dialog is _really awkward_ to use. Let's leverage one of the web's superpowers here: the URL. I created a "Quest List" directory that presents a `Play!` link:
 
-[https://web.zquestclassic.com/play/?open=purezc/quests/731/](https://web.zquestclassic.com/play/?open=purezc/quests/731/)
+[https://web.zquestclassic.com/play/?open=quests/purezc/731](https://web.zquestclassic.com/play/?open=quests/purezc/731)
 
 and in Zelda Classic I grabbed that query parameter and hacked away at the title screen code to either 1) start a new save file with the quest or 2) load an existing save file of that quest. This makes it simpler than ever to jump into a Zelda Classic quest.
 
@@ -734,7 +734,7 @@ I should mention, Zelda Classic has two separate code paths for music: one is fo
 - spc (SNES Sound)
 - vgm ([Video Game Music](https://en.wikipedia.org/wiki/VGM_(file_format)), a grab-bag of multiple game systems)
 
-So Emscripten + SDL_mixer handles everything but these retro formats. For that, Zelda Classic uses the [Game Music Emulator](https://bitbucket.org/mpyne/game-music-emu/src/master/) (GME) library. Luckily I found a fork of SDL_mixer called [SDL_mixer X](https://github.com/WohlSoft/SDL-Mixer-X) which integrates GME into SDL. It was pretty straightforward to grab that and merge the changes into the port that Emscriten uses. I also needed to add GME to Emscripten's port system, which was pretty [straightforward](https://gist.github.com/connorjclark/b9e0986c518d0193031c71181c8e2fd3).
+So Emscripten + SDL_mixer handles everything but these retro formats. For that, Zelda Classic uses the [Game Music Emulator](https://bitbucket.org/mpyne/game-music-emu/src/master/) (GME) library. Luckily I found a fork of SDL_mixer called [SDL_mixer X](https://github.com/WohlSoft/SDL-Mixer-X) which integrates GME into SDL. It was pretty straightforward to grab that and merge the changes into the port that Emscripten uses. I also needed to add GME to Emscripten's port system, which was pretty [straightforward](https://gist.github.com/connorjclark/b9e0986c518d0193031c71181c8e2fd3).
 
 > I sent SDL_mixer a [PR](https://github.com/libsdl-org/SDL_mixer/pull/378) for adding GME. If that gets merged, I'll also add a `gme` option to Emscripten. But for now, I'm just fine with my patching workflow.
 
